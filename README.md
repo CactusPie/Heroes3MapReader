@@ -1,0 +1,1 @@
+# Heroes3MapReader
