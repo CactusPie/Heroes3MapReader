@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heroes3MapReader.Logic", "Heroes3MapReader.Logic\Heroes3MapReader.Logic.csproj", "{D3093525-F648-486D-82DA-0E5DFD8E83E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heroes3MapReader.UI", "Heroes3MapReader.UI\Heroes3MapReader.UI.csproj", "{A1B2C3D4-E5F6-4789-ABCD-123456789ABC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3093525-F648-486D-82DA-0E5DFD8E83E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3093525-F648-486D-82DA-0E5DFD8E83E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3093525-F648-486D-82DA-0E5DFD8E83E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3093525-F648-486D-82DA-0E5DFD8E83E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-123456789ABC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-123456789ABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-123456789ABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-123456789ABC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
