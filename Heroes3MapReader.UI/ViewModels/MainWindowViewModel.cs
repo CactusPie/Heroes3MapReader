@@ -33,6 +33,9 @@ public partial class MainWindowViewModel : ViewModelBase
     private int? _selectedPlayerCount;
 
     [ObservableProperty]
+    private int? _selectedTeamCount;
+
+    [ObservableProperty]
     private MapDifficulty? _selectedDifficulty;
 
     [ObservableProperty]
@@ -60,11 +63,12 @@ public partial class MainWindowViewModel : ViewModelBase
         _storageProvider = storageProvider;
         MapSizes = Enum.GetValues<MapSize>().Cast<MapSize?>().Prepend(null).ToList();
         PlayerCounts = Enumerable.Range(1, 8).Cast<int?>().Prepend(null).ToList();
+        TeamCounts = Enumerable.Range(2, 6).Cast<int?>().Prepend(0).Prepend(null).ToList();
         Difficulties = Enum.GetValues<MapDifficulty>().Cast<MapDifficulty?>().Prepend(null).ToList();
         VictoryConditions = Enum.GetValues<VictoryConditionType>().Cast<VictoryConditionType?>().Prepend(null).ToList();
         MapFormats = Enum.GetValues<MapFormat>().Cast<MapFormat?>().Prepend(null).ToList();
 
-        foreach (var faction in Enum.GetValues<FactionType>())
+        foreach (FactionType faction in Enum.GetValues<FactionType>())
         {
             var item = new FactionFilterItemViewModel(faction);
             item.PropertyChanged += (s, e) =>
@@ -81,6 +85,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ObservableCollection<MapItemViewModel> FilteredMaps { get; } = [];
     public List<MapSize?> MapSizes { get; }
     public List<int?> PlayerCounts { get; }
+    public List<int?> TeamCounts { get; }
     public List<MapDifficulty?> Difficulties { get; }
     public List<VictoryConditionType?> VictoryConditions { get; }
     public List<MapFormat?> MapFormats { get; }
@@ -93,6 +98,11 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     partial void OnSelectedPlayerCountChanged(int? value)
+    {
+        ApplyFiltersAndSort();
+    }
+
+    partial void OnSelectedTeamCountChanged(int? value)
     {
         ApplyFiltersAndSort();
     }
@@ -282,6 +292,11 @@ public partial class MainWindowViewModel : ViewModelBase
             filtered = filtered.Where(m => m.Map.PlayerCount == SelectedPlayerCount.Value);
         }
 
+        if (SelectedTeamCount.HasValue)
+        {
+            filtered = filtered.Where(m => m.Map.TeamCount == SelectedTeamCount.Value);
+        }
+
         if (SelectedDifficulty.HasValue)
         {
             filtered = filtered.Where(m => m.Map.Difficulty == SelectedDifficulty.Value);
@@ -326,6 +341,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         SelectedSize = null;
         SelectedPlayerCount = null;
+        SelectedTeamCount = null;
         SelectedDifficulty = null;
         SelectedVictoryCondition = null;
         SelectedFormat = null;
