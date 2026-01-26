@@ -134,6 +134,20 @@
                         </ComboBox>
                     </StackPanel>
 
+                    <!-- Has Underground Filter -->
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="Has Underground" FontWeight="SemiBold"/>
+                        <ComboBox ItemsSource="{Binding HasUndergroundOptions}"
+                                  SelectedItem="{Binding SelectedHasUnderground}"
+                                  HorizontalAlignment="Stretch">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={x:Static converters:NullableBoolConverter.Instance}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+
                     <!-- Faction Filter -->
                     <StackPanel Spacing="5">
                         <TextBlock Text="Playable Factions" FontWeight="SemiBold"

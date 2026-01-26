@@ -45,6 +45,9 @@ public partial class MainWindowViewModel : ViewModelBase
     private MapFormat? _selectedFormat;
 
     [ObservableProperty]
+    private bool? _selectedHasUnderground;
+
+    [ObservableProperty]
     private MapItemViewModel? _selectedMap;
 
     [ObservableProperty]
@@ -89,6 +92,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public List<MapDifficulty?> Difficulties { get; }
     public List<VictoryConditionType?> VictoryConditions { get; }
     public List<MapFormat?> MapFormats { get; }
+    public List<bool?> HasUndergroundOptions { get; } = [null, true, false];
 
     public bool CanLoadMaps => !string.IsNullOrWhiteSpace(DirectoryPath) && !IsLoading;
 
@@ -118,6 +122,11 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     partial void OnSelectedFormatChanged(MapFormat? value)
+    {
+        ApplyFiltersAndSort();
+    }
+
+    partial void OnSelectedHasUndergroundChanged(bool? value)
     {
         ApplyFiltersAndSort();
     }
@@ -312,6 +321,11 @@ public partial class MainWindowViewModel : ViewModelBase
             filtered = filtered.Where(m => m.Map.Format == SelectedFormat.Value);
         }
 
+        if (SelectedHasUnderground.HasValue)
+        {
+            filtered = filtered.Where(m => m.Map.HasUnderground == SelectedHasUnderground.Value);
+        }
+
         var selectedFactions = FactionFilters.Where(f => f.IsSelected).Select(f => f.Faction).ToList();
         if (selectedFactions.Count > 0)
         {
@@ -345,6 +359,7 @@ public partial class MainWindowViewModel : ViewModelBase
         SelectedDifficulty = null;
         SelectedVictoryCondition = null;
         SelectedFormat = null;
+        SelectedHasUnderground = null;
 
         foreach (var filter in FactionFilters)
         {
