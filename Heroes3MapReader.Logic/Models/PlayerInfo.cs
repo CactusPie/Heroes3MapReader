@@ -33,9 +33,11 @@ public sealed class PlayerInfo
     public bool HasRandomTown { get; set; }
 
     /// <summary>
-    /// Town type ID (if not random)
+    /// Allowed faction IDs for this player
     /// </summary>
-    public int TownType { get; set; }
+    public List<FactionType> AllowedFactions { get; set; } = new();
+
+    public bool AllFactionsAllowed { get; set; }
 
     /// <summary>
     /// Whether the main town is generated

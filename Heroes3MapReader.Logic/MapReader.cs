@@ -433,25 +433,14 @@ public sealed class MapReader : IMapReader
                 reader.ReadByte(); // faction is selectable
             }
 
-            switch (features.ByteSizes.FactionsBytes)
-            {
-                // Town types bitfield (1 byte RoE, 2 bytes AB+)
-                case 2:
-                {
-                    byte townTypes1 = reader.ReadByte();
-                    byte townTypes2 = reader.ReadByte();
-                    player.TownType = townTypes1 | (townTypes2 << 8);
-                    break;
-                }
-                case 1:
-                    player.TownType = reader.ReadByte();
-                    break;
-                default:
-                    throw new InvalidOperationException("Unsupported faction byte size");
-            }
+            // Read allowed factions bitmask
+            player.AllowedFactions = ReadBitmaskFactions(reader, features.ByteSizes.FactionsBytes, features.Counts.FactionsCount);
 
             // Random town (only meaningful for playable players)
             player.HasRandomTown = reader.ReadBoolean();
+
+
+            player.AllFactionsAllowed = player.HasRandomTown && player.AllowedFactions.Count == features.Counts.FactionsCount;
 
             // Main town
             player.HasMainTown = reader.ReadBoolean();
@@ -822,7 +811,32 @@ public sealed class MapReader : IMapReader
 
         throw new ArgumentOutOfRangeException($"Unsupported byte read count: {bytes}");
     }
+    /// <summary>
+    /// Reads a bitmask representing allowed factions
+    /// </summary>
+    private static List<FactionType> ReadBitmaskFactions(BinaryReader reader, int bytesToRead, int factionsCount)
+    {
+        var allowedFactions = new List<FactionType>();
 
+        for (int byteIndex = 0; byteIndex < bytesToRead; byteIndex++)
+        {
+            byte mask = reader.ReadByte();
+            for (int bit = 0; bit < 8; bit++)
+            {
+                int factionIndex = byteIndex * 8 + bit;
+                if (factionIndex < factionsCount)
+                {
+                    bool isAllowed = (mask & (1 << bit)) != 0;
+                    if (isAllowed)
+                    {
+                        allowedFactions.Add((FactionType)factionIndex);
+                    }
+                }
+            }
+        }
+
+        return allowedFactions;
+    }
     private static TerrainTile ReadTerrainTile(BinaryReader reader)
     {
         return new TerrainTile

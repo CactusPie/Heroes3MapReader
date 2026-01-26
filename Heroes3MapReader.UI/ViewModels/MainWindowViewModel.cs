@@ -47,6 +47,8 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private byte[]? _minimapImage;
 
+    public ObservableCollection<FactionFilterItemViewModel> FactionFilters { get; } = [];
+
     private readonly List<MapItemViewModel> _allMaps = [];
 
     private readonly IMapReaderFactory _mapReaderFactory;
@@ -61,6 +63,19 @@ public partial class MainWindowViewModel : ViewModelBase
         Difficulties = Enum.GetValues<MapDifficulty>().Cast<MapDifficulty?>().Prepend(null).ToList();
         VictoryConditions = Enum.GetValues<VictoryConditionType>().Cast<VictoryConditionType?>().Prepend(null).ToList();
         MapFormats = Enum.GetValues<MapFormat>().Cast<MapFormat?>().Prepend(null).ToList();
+
+        foreach (var faction in Enum.GetValues<FactionType>())
+        {
+            var item = new FactionFilterItemViewModel(faction);
+            item.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(FactionFilterItemViewModel.IsSelected))
+                {
+                    ApplyFiltersAndSort();
+                }
+            };
+            FactionFilters.Add(item);
+        }
     }
 
     public ObservableCollection<MapItemViewModel> FilteredMaps { get; } = [];
@@ -282,6 +297,17 @@ public partial class MainWindowViewModel : ViewModelBase
             filtered = filtered.Where(m => m.Map.Format == SelectedFormat.Value);
         }
 
+        var selectedFactions = FactionFilters.Where(f => f.IsSelected).Select(f => f.Faction).ToList();
+        if (selectedFactions.Count > 0)
+        {
+            filtered = filtered.Where(m =>
+            {
+                return selectedFactions.All(faction =>
+                    m.Map.Players.Any(p => p.CanBeHuman && (p.AllFactionsAllowed || p.AllowedFactions.Contains(faction)))
+                );
+            });
+        }
+
         FilteredMaps.Clear();
         foreach (MapItemViewModel map in filtered)
         {
@@ -303,5 +329,10 @@ public partial class MainWindowViewModel : ViewModelBase
         SelectedDifficulty = null;
         SelectedVictoryCondition = null;
         SelectedFormat = null;
+
+        foreach (var filter in FactionFilters)
+        {
+            filter.IsSelected = false;
+        }
     }
 }
