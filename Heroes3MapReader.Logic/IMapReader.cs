@@ -11,12 +11,7 @@ public interface IMapReader
     /// Reads a map from the specified file path.
     /// </summary>
     /// <param name="filePath">The path to the map file.</param>
+    /// <param name="readTerrain">If true, reads terrain data from the map; otherwise, skips terrain data. Useful for reducing RAM consumption</param>
     /// <returns>A <see cref="MapInfo"/> object containing the map's data.</returns>
-    MapInfo ReadMap(string filePath);
-    /// <summary>
-    /// Reads a map from the provided stream.
-    /// </summary>
-    /// <param name="stream">The stream containing the map data.</param>
-    /// <returns>A <see cref="MapInfo"/> object containing the map's data.</returns>
-    MapInfo ReadMap(Stream stream);
+    MapInfo ReadMap(string filePath, bool readTerrain);
 }

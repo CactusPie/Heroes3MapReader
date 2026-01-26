@@ -131,14 +131,37 @@ public partial class MainWindowViewModel : ViewModelBase
         ApplyFiltersAndSort();
     }
 
-    partial void OnSelectedMapChanged(MapItemViewModel? value)
+    partial void OnSelectedMapChanged(MapItemViewModel? oldValue, MapItemViewModel? newValue)
     {
-        if (value != null)
+        if (oldValue != null)
         {
-            GenerateMinimap(value);
+            // Unload terrain data to free memory
+            oldValue.Map.SurfaceTerrain = null;
+            oldValue.Map.UndergroundTerrain = null;
         }
-        else
+
+        if (newValue == null)
         {
+            MinimapImage = null;
+            return;
+        }
+
+        try
+        {
+            // Load terrain data if not already loaded
+            if (newValue.Map.SurfaceTerrain == null || newValue.Map.UndergroundTerrain == null)
+            {
+                IMapReader reader = _mapReaderFactory.Create();
+                MapInfo mapDetailsWithTerrain = reader.ReadMap(newValue.FilePath, true);
+                newValue.Map.SurfaceTerrain = mapDetailsWithTerrain.SurfaceTerrain;
+                newValue.Map.UndergroundTerrain = mapDetailsWithTerrain.UndergroundTerrain;
+            }
+
+            GenerateMinimap(newValue);
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Error loading map details: {ex.Message}";
             MinimapImage = null;
         }
     }
@@ -214,7 +237,8 @@ public partial class MainWindowViewModel : ViewModelBase
                 {
                     try
                     {
-                        MapInfo mapInfo = mapReader.ReadMap(mapFile);
+                        // Don't read terrain initially to save memory
+                        MapInfo mapInfo = mapReader.ReadMap(mapFile, readTerrain: false);
                         var mapViewModel = new MapItemViewModel(mapFile, mapInfo);
 
                         // Update UI on UI thread

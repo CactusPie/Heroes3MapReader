@@ -37,6 +37,9 @@ public sealed class PlayerInfo
     /// </summary>
     public List<FactionType> AllowedFactions { get; set; } = new();
 
+    /// <summary>
+    /// Whether all factions are allowed for this player
+    /// </summary>
     public bool AllFactionsAllowed { get; set; }
 
     /// <summary>

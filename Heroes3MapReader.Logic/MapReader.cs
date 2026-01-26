@@ -31,19 +31,20 @@ public sealed class MapReader : IMapReader
         _mapSpecificationRepository = mapSpecificationRepository;
     }
 
-    /// <summary>
-    /// Read a map from a file path
-    /// </summary>
-    public MapInfo ReadMap(string filePath)
+    /// <inheritdoc cref="IMapReader"/>
+    public MapInfo ReadMap(string filePath, bool readTerrain)
     {
         using FileStream fileStream = File.OpenRead(filePath);
-        return ReadMap(fileStream);
+        return ReadMap(fileStream, readTerrain);
     }
 
     /// <summary>
-    /// Read a map from a stream
+    /// Reads a map from the provided stream.
     /// </summary>
-    public MapInfo ReadMap(Stream stream)
+    /// <param name="stream">The stream containing the map data.</param>
+    /// <param name="readTerrain">If true, reads terrain data from the map; otherwise, skips terrain data. Useful for reducing RAM consumption</param>
+    /// <returns>A <see cref="MapInfo"/> object containing the map's data.</returns>
+    private MapInfo ReadMap(Stream stream, bool readTerrain)
     {
         // Check if the stream is gzip compressed
         Stream decompressedStream = _decompressor.DecompressIfNeeded(stream);
@@ -52,7 +53,7 @@ public sealed class MapReader : IMapReader
 
         try
         {
-            return ParseMap(reader);
+            return ParseMap(reader, readTerrain);
         }
         finally
         {
@@ -63,7 +64,7 @@ public sealed class MapReader : IMapReader
         }
     }
 
-    private MapInfo ParseMap(BinaryReader reader)
+    private MapInfo ParseMap(BinaryReader reader, bool readTerrain)
     {
         var mapInfo = new MapInfo();
 
@@ -127,7 +128,10 @@ public sealed class MapReader : IMapReader
         // Hero settings (SoD+)
         ReadHeroSettings(reader, mapSpecification);
 
-        ReadTerrainTiles(reader, mapInfo);
+        if (readTerrain)
+        {
+            ReadTerrainTiles(reader, mapInfo);
+        }
 
         return mapInfo;
     }
