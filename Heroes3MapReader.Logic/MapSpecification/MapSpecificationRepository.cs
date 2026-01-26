@@ -1,6 +1,6 @@
 using Heroes3MapReader.Logic.Models.Enums;
 
-namespace Heroes3MapReader.Logic.Features;
+namespace Heroes3MapReader.Logic.MapSpecification;
 
 /// <summary>
 /// Repository for Heroes 3 map format features with lazy loading

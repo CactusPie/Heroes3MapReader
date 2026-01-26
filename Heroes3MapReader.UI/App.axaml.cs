@@ -3,7 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using Heroes3MapReader.Logic;
-using Heroes3MapReader.Logic.Features;
+using Heroes3MapReader.Logic.MapSpecification;
 using Heroes3MapReader.UI.ViewModels;
 using Heroes3MapReader.UI.Views;
 using Microsoft.Extensions.DependencyInjection;

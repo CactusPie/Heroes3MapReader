@@ -1,4 +1,4 @@
-using Heroes3MapReader.Logic.Features;
+using Heroes3MapReader.Logic.MapSpecification;
 
 namespace Heroes3MapReader.Logic;
 

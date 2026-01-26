@@ -1,6 +1,6 @@
 using Heroes3MapReader.Logic.Models.Enums;
 
-namespace Heroes3MapReader.Logic.Features;
+namespace Heroes3MapReader.Logic.MapSpecification;
 
 /// <summary>
 /// Defines a repository for retrieving map specifications based on format and version.
