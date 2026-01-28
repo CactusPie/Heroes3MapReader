@@ -1,4 +1,4 @@
-namespace Heroes3MapReader.Logic;
+namespace Heroes3MapReader.Logic.Interfaces;
 
 /// <summary>
 /// Interface for stream decompression services.

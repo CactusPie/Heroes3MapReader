@@ -59,4 +59,9 @@ public enum FactionType
     /// Factory faction (HotA)
     /// </summary>
     Factory = 10,
+
+    /// <summary>
+    /// Bulwark faction (HotA)
+    /// </summary>
+    Bulwark = 11,
 }

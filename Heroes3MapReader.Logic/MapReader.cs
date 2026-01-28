@@ -1,4 +1,5 @@
 using System.Text;
+using Heroes3MapReader.Logic.Interfaces;
 using Heroes3MapReader.Logic.MapSpecificationLogic;
 using Heroes3MapReader.Logic.Models;
 using Heroes3MapReader.Logic.Models.Enums;
@@ -93,8 +94,8 @@ public sealed class MapReader : IMapReader
         mapInfo.Height = (int)size;
         mapInfo.Size = ParseMapSize((int)size);
         mapInfo.HasUnderground = reader.ReadBoolean();
-        mapInfo.Name = ReadString(reader);
-        mapInfo.Description = ReadString(reader);
+        mapInfo.Name = BinaryReaderExtensions.ReadString(reader, _encoding);
+        mapInfo.Description = BinaryReaderExtensions.ReadString(reader, _encoding);
         mapInfo.Difficulty = (MapDifficulty)reader.ReadByte();
 
         // Max hero level (AB+)
@@ -118,6 +119,9 @@ public sealed class MapReader : IMapReader
         reader.ReadBytes(31);
 
         ReadHotaExtraHeader(reader, mapSpecification);
+
+        // HotA9+ scripts
+        HotaScriptReader.SkipHotaScripts(reader, mapSpecification, _encoding);
 
         // Unavailable artifacts (AB+)
         GetUnavailableArtifacts(reader, mapInfo, mapSpecification);
@@ -259,8 +263,8 @@ public sealed class MapReader : IMapReader
         mapInfo.Rumors = new List<string>();
         for (int i = 0; i < rumorCount; i++)
         {
-            string rumorName = ReadString(reader);
-            string rumorDescription = ReadString(reader);
+            string rumorName = BinaryReaderExtensions.ReadString(reader, _encoding);
+            string rumorDescription = BinaryReaderExtensions.ReadString(reader, _encoding);
             mapInfo.Rumors.Add($"{rumorName}: {rumorDescription}");
         }
     }
@@ -380,30 +384,6 @@ public sealed class MapReader : IMapReader
         };
     }
 
-    private string ReadString(BinaryReader reader)
-    {
-        uint length = reader.ReadUInt32();
-        if (length == 0)
-        {
-            return string.Empty;
-        }
-
-        if (length > 100000)
-        {
-            throw new InvalidDataException($"String length too large: {length}");
-        }
-
-        byte[] bytes = reader.ReadBytes((int)length);
-        try
-        {
-            return _encoding.GetString(bytes);
-        }
-        catch
-        {
-            return Encoding.UTF8.GetString(bytes);
-        }
-    }
-
     private List<PlayerInfo> ReadPlayers(BinaryReader reader, MapSpecification features)
     {
         var players = new List<PlayerInfo>();
@@ -489,7 +469,7 @@ public sealed class MapReader : IMapReader
                     player.CustomHeroPortrait = portraitId;
                 }
 
-                player.CustomHeroName = ReadString(reader);
+                player.CustomHeroName = BinaryReaderExtensions.ReadString(reader, _encoding);
             }
 
             // Additional player info (AB+) - read for ALL players
@@ -500,7 +480,7 @@ public sealed class MapReader : IMapReader
                 for (int h = 0; h < heroCount; h++)
                 {
                     reader.ReadByte(); // hero type
-                    ReadString(reader); // hero name
+                    BinaryReaderExtensions.ReadString(reader, _encoding); // hero name
                 }
             }
 
@@ -510,7 +490,7 @@ public sealed class MapReader : IMapReader
         return players;
     }
 
-    private VictoryCondition ReadVictoryCondition(BinaryReader reader, MapFormat format, bool isHotaFactory)
+    private static VictoryCondition ReadVictoryCondition(BinaryReader reader, MapFormat format, bool isHotaFactory)
     {
         var type = (VictoryConditionType)reader.ReadByte();
         if (type == VictoryConditionType.Standard)
@@ -545,11 +525,11 @@ public sealed class MapReader : IMapReader
         switch (type)
         {
             case VictoryConditionType.AcquireArtifact:
-                condition.ArtifactID = ReadBytesAsUint32(reader, Clamp(artifactSize, 1, 2));
+                condition.ArtifactID = BinaryReaderExtensions.ReadBytesAsUint32(reader, BinaryReaderExtensions.Clamp(artifactSize, 1, 2));
                 break;
 
             case VictoryConditionType.AccumulateCreatures:
-                condition.CreatureID = ReadBytesAsUint32(reader, Clamp(artifactSize, 1, 2));
+                condition.CreatureID = BinaryReaderExtensions.ReadBytesAsUint32(reader, BinaryReaderExtensions.Clamp(artifactSize, 1, 2));
                 condition.CreatureCount = reader.ReadUInt32();
                 break;
 
@@ -671,7 +651,7 @@ public sealed class MapReader : IMapReader
             hero.PortraitID = -1; // Default
         }
 
-        hero.Name = ReadString(reader);
+        hero.Name = BinaryReaderExtensions.ReadString(reader, _encoding);
         hero.AllowedPlayers = reader.ReadByte(); // contains a bitmask for allowed players
 
         return hero;
@@ -720,7 +700,7 @@ public sealed class MapReader : IMapReader
         bool hasBiography = reader.ReadBoolean();
         if (hasBiography)
         {
-            ReadString(reader);
+            BinaryReaderExtensions.ReadString(reader, _encoding);
         }
 
         // Gender
@@ -759,7 +739,7 @@ public sealed class MapReader : IMapReader
         }
     }
 
-    private void ReadTerrainTiles(BinaryReader reader, MapInfo mapInfo)
+    private static void ReadTerrainTiles(BinaryReader reader, MapInfo mapInfo)
     {
         int width = mapInfo.Width;
         int height = mapInfo.Height;
@@ -790,41 +770,6 @@ public sealed class MapReader : IMapReader
                 }
             }
         }
-    }
-
-    private static uint Clamp(uint value, uint min, uint max)
-    {
-        if (value < min)
-        {
-            return min;
-        }
-
-        if (value > max)
-        {
-            return max;
-        }
-
-        return value;
-    }
-
-    private static uint ReadBytesAsUint32(BinaryReader reader, uint bytes)
-    {
-        if (bytes == 1)
-        {
-            return reader.ReadByte();
-        }
-
-        if (bytes == 2)
-        {
-            return reader.ReadUInt16();
-        }
-
-        if (bytes == 4)
-        {
-            return reader.ReadUInt32();
-        }
-
-        throw new ArgumentOutOfRangeException($"Unsupported byte read count: {bytes}");
     }
 
     /// <summary>

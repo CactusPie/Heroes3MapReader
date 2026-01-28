@@ -8,6 +8,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Heroes3MapReader.Logic;
+using Heroes3MapReader.Logic.Interfaces;
 using Heroes3MapReader.Logic.Models;
 using Heroes3MapReader.Logic.Models.Enums;
 

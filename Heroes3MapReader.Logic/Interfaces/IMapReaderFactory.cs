@@ -1,4 +1,4 @@
-namespace Heroes3MapReader.Logic;
+namespace Heroes3MapReader.Logic.Interfaces;
 
 /// <summary>
 /// Factory for creating instances of IMapReader.

@@ -1,6 +1,6 @@
 using Heroes3MapReader.Logic.Models;
 
-namespace Heroes3MapReader.Logic;
+namespace Heroes3MapReader.Logic.Interfaces;
 
 /// <summary>
 /// Defines a reader for Heroes 3 map files.

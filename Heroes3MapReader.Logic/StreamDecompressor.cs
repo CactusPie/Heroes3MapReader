@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using Heroes3MapReader.Logic.Interfaces;
 
 namespace Heroes3MapReader.Logic;
 

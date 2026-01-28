@@ -1,3 +1,4 @@
+using Heroes3MapReader.Logic.Interfaces;
 using Heroes3MapReader.Logic.MapSpecificationLogic;
 
 namespace Heroes3MapReader.Logic;
