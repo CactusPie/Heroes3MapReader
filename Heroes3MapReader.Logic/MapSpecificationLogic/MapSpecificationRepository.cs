@@ -1,6 +1,6 @@
 using Heroes3MapReader.Logic.Models.Enums;
 
-namespace Heroes3MapReader.Logic.MapSpecification;
+namespace Heroes3MapReader.Logic.MapSpecificationLogic;
 
 /// <summary>
 /// Repository for Heroes 3 map format features with lazy loading
@@ -92,7 +92,8 @@ public sealed class MapSpecificationRepository : IMapSpecificationRepository
                 IsHotA5OrHigher: false,
                 IsHotA6OrHigher: false,
                 IsHotA7OrHigher: false,
-                IsHotA8OrHigher: false
+                IsHotA8OrHigher: false,
+                IsHotA9OrHigher: false
             ),
 
             ByteSizes = new MapByteSizes(
@@ -248,16 +249,8 @@ public sealed class MapSpecificationRepository : IMapSpecificationRepository
     /// </summary>
     /// <param name="hotaVersion">The HotA version number (supports versions 0-8)</param>
     /// <returns>The features for the specified HotA version</returns>
-    /// <exception cref="ArgumentException">Thrown when hotaVersion is greater than 8</exception>
     private MapSpecification CreateSpecificationHota(uint hotaVersion)
     {
-        // even if changes are minimal, we might not be able to parse map header in map selection screen
-        // throw exception - to be caught by map selection screen & excluded as invalid
-        if (hotaVersion > 8)
-        {
-            throw new ArgumentException($"Invalid map format! HotA version {hotaVersion} is not supported (max version: 8)");
-        }
-
         MapSpecification baseFeatures = _sodFeatures.Value;
 
         int artifactsBytes = 21;
@@ -297,6 +290,7 @@ public sealed class MapSpecificationRepository : IMapSpecificationRepository
                 IsHotA6OrHigher = hotaVersion > 5,
                 IsHotA7OrHigher = hotaVersion > 6,
                 IsHotA8OrHigher = hotaVersion > 7,
+                IsHotA9OrHigher = hotaVersion > 8,
             },
 
             ByteSizes = baseFeatures.ByteSizes with

@@ -1,5 +1,5 @@
 using System.Text;
-using Heroes3MapReader.Logic.MapSpecification;
+using Heroes3MapReader.Logic.MapSpecificationLogic;
 using Heroes3MapReader.Logic.Models;
 using Heroes3MapReader.Logic.Models.Enums;
 
@@ -76,7 +76,7 @@ public sealed class MapReader : IMapReader
         mapInfo.Format = format;
 
         // HotA extended format info
-        MapSpecification.MapSpecification mapSpecification;
+        MapSpecification mapSpecification;
         if (format == MapFormat.HotA)
         {
             mapSpecification = ReadHotaHeaderAndFeatures(reader, format);
@@ -147,7 +147,7 @@ public sealed class MapReader : IMapReader
         }
     }
 
-    private void ReadHeroSettings(BinaryReader reader, MapSpecification.MapSpecification features)
+    private void ReadHeroSettings(BinaryReader reader, MapSpecification features)
     {
         if (!features.VersionFlags.IsSoDOrHigher)
         {
@@ -188,7 +188,7 @@ public sealed class MapReader : IMapReader
     private static void GetUnavailableSpellsAndSkills(
         BinaryReader reader,
         MapInfo mapInfo,
-        MapSpecification.MapSpecification features)
+        MapSpecification features)
     {
         if (features.VersionFlags.IsSoDOrHigher)
         {
@@ -197,7 +197,7 @@ public sealed class MapReader : IMapReader
         }
     }
 
-    private static void GetUnavailableArtifacts(BinaryReader reader, MapInfo mapInfo, MapSpecification.MapSpecification features)
+    private static void GetUnavailableArtifacts(BinaryReader reader, MapInfo mapInfo, MapSpecification features)
     {
         if (!features.VersionFlags.IsAbOrHigher)
         {
@@ -218,7 +218,7 @@ public sealed class MapReader : IMapReader
         mapInfo.AvailableArtifacts = reader.ReadBytes(artifactBitfieldLength);
     }
 
-    private static void ReadHotaExtraHeader(BinaryReader reader, MapSpecification.MapSpecification features)
+    private static void ReadHotaExtraHeader(BinaryReader reader, MapSpecification features)
     {
         if (features.VersionFlags.IsHotA0OrHigher)
         {
@@ -265,7 +265,7 @@ public sealed class MapReader : IMapReader
         }
     }
 
-    private void ReadCustomHeroes(BinaryReader reader, MapInfo mapInfo, MapSpecification.MapSpecification features)
+    private void ReadCustomHeroes(BinaryReader reader, MapInfo mapInfo, MapSpecification features)
     {
         if (features.VersionFlags.IsSoDOrHigher)
         {
@@ -278,7 +278,7 @@ public sealed class MapReader : IMapReader
         }
     }
 
-    private static void ReadPlaceholderHeroes(BinaryReader reader, MapSpecification.MapSpecification features)
+    private static void ReadPlaceholderHeroes(BinaryReader reader, MapSpecification features)
     {
         if (features.VersionFlags.IsAbOrHigher)
         {
@@ -307,10 +307,10 @@ public sealed class MapReader : IMapReader
         }
     }
 
-    private MapSpecification.MapSpecification ReadHotaHeaderAndFeatures(BinaryReader reader, MapFormat mapFormat)
+    private MapSpecification ReadHotaHeaderAndFeatures(BinaryReader reader, MapFormat mapFormat)
     {
         uint hotaVersion = reader.ReadUInt32();
-        MapSpecification.MapSpecification features = _mapSpecificationRepository.Get(mapFormat, hotaVersion);
+        MapSpecification features = _mapSpecificationRepository.Get(mapFormat, hotaVersion);
 
         if (features.VersionFlags.IsHotA8OrHigher)
         {
@@ -344,6 +344,11 @@ public sealed class MapReader : IMapReader
         if (features.VersionFlags.IsHotA8OrHigher)
         {
             reader.ReadBoolean(); // forceMatchingVersion
+        }
+
+        if (features.VersionFlags.IsHotA9OrHigher)
+        {
+            reader.ReadInt32(); // unknown
         }
 
         return features;
@@ -399,7 +404,7 @@ public sealed class MapReader : IMapReader
         }
     }
 
-    private List<PlayerInfo> ReadPlayers(BinaryReader reader, MapSpecification.MapSpecification features)
+    private List<PlayerInfo> ReadPlayers(BinaryReader reader, MapSpecification features)
     {
         var players = new List<PlayerInfo>();
 
@@ -624,7 +629,7 @@ public sealed class MapReader : IMapReader
         return condition;
     }
 
-    private static void ReadHeroAvailability(BinaryReader reader, MapInfo mapInfo, MapSpecification.MapSpecification features)
+    private static void ReadHeroAvailability(BinaryReader reader, MapInfo mapInfo, MapSpecification features)
     {
         int heroCount;
         int bitfieldLength;
@@ -672,7 +677,7 @@ public sealed class MapReader : IMapReader
         return hero;
     }
 
-    private void SkipHeroSettings(BinaryReader reader, MapSpecification.MapSpecification features)
+    private void SkipHeroSettings(BinaryReader reader, MapSpecification features)
     {
         // Experience
         bool hasExperience = reader.ReadBoolean();

@@ -1,9 +1,9 @@
-namespace Heroes3MapReader.Logic.MapSpecification;
+namespace Heroes3MapReader.Logic.MapSpecificationLogic;
 
 /// <summary>
 /// Represents the specification for a given map format, detailing version flags, byte sizes, counts, and invalid identifiers.
 /// </summary>
-public class MapSpecification
+public sealed class MapSpecification
 {
     /// <summary>
     /// Gets the version flags that indicate which optional sections are present in the map file.

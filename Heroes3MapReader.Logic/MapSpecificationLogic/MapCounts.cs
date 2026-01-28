@@ -1,4 +1,4 @@
-namespace Heroes3MapReader.Logic.MapSpecification;
+namespace Heroes3MapReader.Logic.MapSpecificationLogic;
 
 /// <summary>
 /// Contains the counts for various map format elements

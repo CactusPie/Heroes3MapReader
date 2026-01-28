@@ -1,4 +1,4 @@
-namespace Heroes3MapReader.Logic.MapSpecification;
+namespace Heroes3MapReader.Logic.MapSpecificationLogic;
 
 /// <summary>
 /// Contains the invalid identifier values for different map format elements

@@ -1,4 +1,4 @@
-namespace Heroes3MapReader.Logic.MapSpecification;
+namespace Heroes3MapReader.Logic.MapSpecificationLogic;
 
 /// <summary>
 /// Contains the version flags for different Heroes 3 map formats
@@ -16,6 +16,7 @@ namespace Heroes3MapReader.Logic.MapSpecification;
 /// <param name="IsHotA6OrHigher">A value indicating whether the map uses HotA (Horn of the Abyss) version 6.x format or higher</param>
 /// <param name="IsHotA7OrHigher">A value indicating whether the map uses HotA (Horn of the Abyss) version 7.x format or higher</param>
 /// <param name="IsHotA8OrHigher">A value indicating whether the map uses HotA (Horn of the Abyss) version 8.x format or higher</param>
+/// <param name="IsHotA9OrHigher">A value indicating whether the map uses HotA (Horn of the Abyss) version 9.x format or higher</param>
 public sealed record MapVersionFlags(
     bool IsRoeOrHigher,
     bool IsAbOrHigher,
@@ -29,5 +30,6 @@ public sealed record MapVersionFlags(
     bool IsHotA5OrHigher,
     bool IsHotA6OrHigher,
     bool IsHotA7OrHigher,
-    bool IsHotA8OrHigher
+    bool IsHotA8OrHigher,
+    bool IsHotA9OrHigher
 );
