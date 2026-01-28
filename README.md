@@ -2,7 +2,7 @@
 
 A modern, cross-platform utility for reading, analyzing, and visualizing Heroes of Might and Magic III map files (`.h3m`). Built with .NET 8 and Avalonia UI.
 
-Currently supports all vanilla maps as well as HotA maps up to version 1.7.* (Factory). HotA version 1.8.* (Bulwark) and above are not yet supported.
+Currently supports all vanilla maps as well as HotA maps up to version 1.8 (Bulwark).
 
 ## Features
 
