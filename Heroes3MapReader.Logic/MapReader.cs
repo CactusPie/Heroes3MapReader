@@ -11,7 +11,9 @@ namespace Heroes3MapReader.Logic;
 public sealed class MapReader : IMapReader
 {
     private readonly Encoding _encoding;
+
     private readonly IStreamDecompressor _decompressor;
+
     private readonly IMapSpecificationRepository _mapSpecificationRepository;
 
     static MapReader()
@@ -183,7 +185,10 @@ public sealed class MapReader : IMapReader
         }
     }
 
-    private static void GetUnavailableSpellsAndSkills(BinaryReader reader, MapInfo mapInfo, MapSpecification.MapSpecification features)
+    private static void GetUnavailableSpellsAndSkills(
+        BinaryReader reader,
+        MapInfo mapInfo,
+        MapSpecification.MapSpecification features)
     {
         if (features.VersionFlags.IsSoDOrHigher)
         {
@@ -215,13 +220,13 @@ public sealed class MapReader : IMapReader
 
     private static void ReadHotaExtraHeader(BinaryReader reader, MapSpecification.MapSpecification features)
     {
-        if(features.VersionFlags.IsHotA0OrHigher)
+        if (features.VersionFlags.IsHotA0OrHigher)
         {
             reader.ReadBoolean(); // allowSpecialMonths, skipped
             reader.ReadBytes(3);
         }
 
-        if(features.VersionFlags.IsHotA1OrHigher)
+        if (features.VersionFlags.IsHotA1OrHigher)
         {
             int combinedArtifactsCount = reader.ReadInt32();
             int combinedArtifactsBytes = (combinedArtifactsCount + 7) / 8;
@@ -232,12 +237,12 @@ public sealed class MapReader : IMapReader
             }
         }
 
-        if(features.VersionFlags.IsHotA3OrHigher)
+        if (features.VersionFlags.IsHotA3OrHigher)
         {
             reader.ReadInt32(); // roundLimit, skipped
         }
 
-        if(features.VersionFlags.IsHotA5OrHigher)
+        if (features.VersionFlags.IsHotA5OrHigher)
         {
             const int playerLimit = 8;
             for (int i = 0; i < playerLimit; ++i)
@@ -307,36 +312,36 @@ public sealed class MapReader : IMapReader
         uint hotaVersion = reader.ReadUInt32();
         MapSpecification.MapSpecification features = _mapSpecificationRepository.Get(mapFormat, hotaVersion);
 
-  if(features.VersionFlags.IsHotA8OrHigher)
-  {
+        if (features.VersionFlags.IsHotA8OrHigher)
+        {
             reader.ReadUInt32(); // major
             reader.ReadUInt32(); // minor
             reader.ReadUInt32(); // patch
         }
 
-  if(features.VersionFlags.IsHotA1OrHigher)
-  {
-  	reader.ReadByte(); //isMirrorMap
-  	reader.ReadByte(); //isArenaMap
-  }
+        if (features.VersionFlags.IsHotA1OrHigher)
+        {
+            reader.ReadByte(); //isMirrorMap
+            reader.ReadByte(); //isArenaMap
+        }
 
-  if(features.VersionFlags.IsHotA2OrHigher)
-  {
-  	reader.ReadUInt32(); // terrainTypesCount
-  }
+        if (features.VersionFlags.IsHotA2OrHigher)
+        {
+            reader.ReadUInt32(); // terrainTypesCount
+        }
 
-  if(features.VersionFlags.IsHotA5OrHigher)
-  {
+        if (features.VersionFlags.IsHotA5OrHigher)
+        {
             reader.ReadUInt32(); // townTypesCount
             reader.ReadSByte(); // allowedDifficultiesMask
-  }
+        }
 
-  if(features.VersionFlags.IsHotA7OrHigher)
-  {
-  	reader.ReadByte(); // canHireDefeatedHeroes
-  }
+        if (features.VersionFlags.IsHotA7OrHigher)
+        {
+            reader.ReadByte(); // canHireDefeatedHeroes
+        }
 
-        if(features.VersionFlags.IsHotA8OrHigher)
+        if (features.VersionFlags.IsHotA8OrHigher)
         {
             reader.ReadBoolean(); // forceMatchingVersion
         }
@@ -409,7 +414,7 @@ public sealed class MapReader : IMapReader
 
             bool canPlay = player.CanBeHuman || player.CanBeComputer;
 
-            if(!canPlay)
+            if (!canPlay)
             {
                 if (features.VersionFlags.IsRoeOrHigher)
                 {
@@ -478,6 +483,7 @@ public sealed class MapReader : IMapReader
                 {
                     player.CustomHeroPortrait = portraitId;
                 }
+
                 player.CustomHeroName = ReadString(reader);
             }
 
@@ -732,7 +738,7 @@ public sealed class MapReader : IMapReader
         void ReadArtifacts()
         {
             // Artifact id
-            if(features.VersionFlags.IsAbOrHigher)
+            if (features.VersionFlags.IsAbOrHigher)
             {
                 reader.ReadUInt16();
             }
@@ -815,6 +821,7 @@ public sealed class MapReader : IMapReader
 
         throw new ArgumentOutOfRangeException($"Unsupported byte read count: {bytes}");
     }
+
     /// <summary>
     /// Reads a bitmask representing allowed factions
     /// </summary>
@@ -841,6 +848,7 @@ public sealed class MapReader : IMapReader
 
         return allowedFactions;
     }
+
     private static TerrainTile ReadTerrainTile(BinaryReader reader)
     {
         return new TerrainTile
