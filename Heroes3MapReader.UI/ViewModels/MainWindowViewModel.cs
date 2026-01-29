@@ -289,16 +289,22 @@ public partial class MainWindowViewModel : ViewModelBase
             });
 
             // Wait a moment for final UI updates to complete
-            await Task.Delay(100);
+            _ = Task.Delay(100).ContinueWith(_ =>
+            {
+                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    if (failedCount > 0)
+                    {
+                        StatusMessage = $"Loaded {loadedCount} of {totalFiles} maps ({failedCount} failed)";
+                    }
+                    else
+                    {
+                        StatusMessage = $"Loaded {loadedCount} of {totalFiles} maps";
+                    }
+                });
+            });
 
-            if (failedCount > 0)
-            {
-                StatusMessage = $"Loaded {loadedCount} of {totalFiles} maps ({failedCount} failed)";
-            }
-            else
-            {
-                StatusMessage = $"Loaded {loadedCount} of {totalFiles} maps";
-            }
+
 
             ApplyFiltersAndSort();
         }

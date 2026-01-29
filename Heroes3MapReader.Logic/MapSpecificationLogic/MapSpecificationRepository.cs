@@ -260,6 +260,7 @@ public sealed class MapSpecificationRepository : IMapSpecificationRepository
         int heroesPortraitsCount = 186;
         int factionsCount = 10;
         int creaturesCount = 171;
+        int skillsCount = 29; // + Interference
 
         if (hotaVersion >= 3)
         {
@@ -276,6 +277,16 @@ public sealed class MapSpecificationRepository : IMapSpecificationRepository
             heroesCount = 198; // + 16 Factory, +3 campaign
             heroesPortraitsCount = 228; // + 16 Factory, +A LOT campaign
             heroesBytes = 25;
+        }
+
+        if (hotaVersion >= 7)
+        {
+            factionsCount = 12; // + Bulwark
+            creaturesCount = 200; // + 14 Bulwark
+            heroesCount = 215; // + 17 Bulwark
+            heroesPortraitsCount = 245; // + 17 Bulwark
+            skillsCount = 30; // + Runes
+            heroesBytes = 27;
         }
 
         var result = new MapSpecification
@@ -302,7 +313,7 @@ public sealed class MapSpecificationRepository : IMapSpecificationRepository
             Counts = baseFeatures.Counts with
             {
                 TerrainsCount = 12, // +Highlands +Wasteland
-                SkillsCount = 29, // + Interference
+                SkillsCount = skillsCount, // + Interference
                 FactionsCount = factionsCount,
                 CreaturesCount = creaturesCount,
                 ArtifactsCount = artifactsCount,
