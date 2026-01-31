@@ -10,8 +10,22 @@ internal class Program
         .StartWithClassicDesktopLifetime(args);
 
     private static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        var builder = AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace();
+
+#if DEBUG
+        builder.AfterSetup(_ =>
+        {
+            if (builder.Instance is App app)
+            {
+                app.AttachDevTools();
+            }
+        });
+#endif
+
+        return builder;
+    }
 }
