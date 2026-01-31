@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
@@ -60,6 +61,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private int _selectedSpellCount;
 
+    [ObservableProperty]
+    private ObservableCollection<MapItemViewModel> _filteredMaps = [];
+
     public ObservableCollection<FactionFilterItemViewModel> FactionFilters { get; } = [];
     public ObservableCollection<SpellFilterItemViewModel> SpellFilters { get; } = [];
 
@@ -68,6 +72,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly IMapReaderFactory _mapReaderFactory;
     private readonly IStorageProvider _storageProvider;
     private readonly ISpellSelectionWindowFactory _spellSelectionWindowFactory;
+    private CancellationTokenSource? _filterCancellationTokenSource;
 
     public MainWindowViewModel(IMapReaderFactory mapReaderFactory, IStorageProvider storageProvider, ISpellSelectionWindowFactory spellSelectionWindowFactory)
     {
@@ -109,7 +114,6 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public ObservableCollection<MapItemViewModel> FilteredMaps { get; } = [];
     public List<MapSize?> MapSizes { get; }
     public List<int?> PlayerCounts { get; }
     public List<int?> TeamCounts { get; }
@@ -238,7 +242,7 @@ public partial class MainWindowViewModel : ViewModelBase
         IsLoading = true;
         StatusMessage = "Scanning for maps...";
         _allMaps.Clear();
-        FilteredMaps.Clear();
+        FilteredMaps = [];
 
         try
         {
@@ -343,78 +347,101 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void ApplyFiltersAndSort()
     {
-        IEnumerable<MapItemViewModel> filtered = _allMaps.AsEnumerable();
+        // Cancel any previous filtering operation
+        _filterCancellationTokenSource?.Cancel();
 
-        if (SelectedSize.HasValue)
-        {
-            filtered = filtered.Where(m => m.Map.Size == SelectedSize.Value);
-        }
+        _filterCancellationTokenSource = new CancellationTokenSource();
+        CancellationToken cancellationToken = _filterCancellationTokenSource.Token;
 
-        if (SelectedPlayerCount.HasValue)
-        {
-            filtered = filtered.Where(m => m.Map.PlayerCount == SelectedPlayerCount.Value);
-        }
+        // Capture current filter values to use in background thread
+        MapSize? selectedSize = SelectedSize;
+        int? selectedPlayerCount = SelectedPlayerCount;
+        int? selectedTeamCount = SelectedTeamCount;
+        MapDifficulty? selectedDifficulty = SelectedDifficulty;
+        VictoryConditionType? selectedVictoryCondition = SelectedVictoryCondition;
+        MapFormat? selectedFormat = SelectedFormat;
+        bool? selectedHasUnderground = SelectedHasUnderground;
+        List<FactionType> selectedFactions = FactionFilters.Where(f => f.IsSelected).Select(f => f.Faction).ToList();
+        List<SpellType> selectedSpells = SpellFilters.Where(f => f.IsSelected).Select(f => f.Spell).ToList();
+        List<MapItemViewModel> allMapsCopy = _allMaps.ToList();
 
-        if (SelectedTeamCount.HasValue)
+        _ = Task.Run(() =>
         {
-            filtered = filtered.Where(m => m.Map.TeamCount == SelectedTeamCount.Value);
-        }
+            IEnumerable<MapItemViewModel> filtered = allMapsCopy.AsEnumerable();
 
-        if (SelectedDifficulty.HasValue)
-        {
-            filtered = filtered.Where(m => m.Map.Difficulty == SelectedDifficulty.Value);
-        }
-
-        if (SelectedVictoryCondition.HasValue)
-        {
-            filtered = filtered.Where(m => (m.Map.VictoryCondition?.Type ?? VictoryConditionType.Standard) == SelectedVictoryCondition.Value);
-        }
-
-        if (SelectedFormat.HasValue)
-        {
-            filtered = filtered.Where(m => m.Map.Format == SelectedFormat.Value);
-        }
-
-        if (SelectedHasUnderground.HasValue)
-        {
-            filtered = filtered.Where(m => m.Map.HasUnderground == SelectedHasUnderground.Value);
-        }
-
-        var selectedFactions = FactionFilters.Where(f => f.IsSelected).Select(f => f.Faction).ToList();
-        if (selectedFactions.Count > 0)
-        {
-            filtered = filtered.Where(m =>
+            if (selectedSize.HasValue)
             {
-                return selectedFactions.All(faction =>
-                    m.Map.Players.Any(p => p.CanBeHuman && (p.AllFactionsAllowed || p.AllowedFactions.Contains(faction)))
-                );
-            });
-        }
+                filtered = filtered.Where(m => m.Map.Size == selectedSize.Value);
+            }
 
-        var selectedSpells = SpellFilters.Where(f => f.IsSelected).Select(f => f.Spell).ToList();
-        if (selectedSpells.Count > 0)
-        {
-            filtered = filtered.Where(m =>
+            if (selectedPlayerCount.HasValue)
             {
-                return selectedSpells.All(spell => m.Map.AvailableSpells.Contains(spell));
+                filtered = filtered.Where(m => m.Map.PlayerCount == selectedPlayerCount.Value);
+            }
+
+            if (selectedTeamCount.HasValue)
+            {
+                filtered = filtered.Where(m => m.Map.TeamCount == selectedTeamCount.Value);
+            }
+
+            if (selectedDifficulty.HasValue)
+            {
+                filtered = filtered.Where(m => m.Map.Difficulty == selectedDifficulty.Value);
+            }
+
+            if (selectedVictoryCondition.HasValue)
+            {
+                filtered = filtered.Where(m => (m.Map.VictoryCondition?.Type ?? VictoryConditionType.Standard) == selectedVictoryCondition.Value);
+            }
+
+            if (selectedFormat.HasValue)
+            {
+                filtered = filtered.Where(m => m.Map.Format == selectedFormat.Value);
+            }
+
+            if (selectedHasUnderground.HasValue)
+            {
+                filtered = filtered.Where(m => m.Map.HasUnderground == selectedHasUnderground.Value);
+            }
+
+            if (selectedFactions.Count > 0)
+            {
+                filtered = filtered.Where(m =>
+                {
+                    return selectedFactions.All(faction =>
+                        m.Map.Players.Any(p => p.CanBeHuman && (p.AllFactionsAllowed || p.AllowedFactions.Contains(faction)))
+                    );
+                });
+            }
+
+            if (selectedSpells.Count > 0)
+            {
+                filtered = filtered.Where(m =>
+                {
+                    return selectedSpells.All(spell => m.Map.AvailableSpells.Contains(spell));
+                });
+            }
+
+            List<MapItemViewModel> result = filtered.ToList();
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                // Update UI by replacing the entire collection (single notification)
+                FilteredMaps = new ObservableCollection<MapItemViewModel>(result);
+
+                int filterCount = allMapsCopy.Count - result.Count;
+                if (filterCount > 0)
+                {
+                    StatusMessage = $"Showing {FilteredMaps.Count} of {allMapsCopy.Count} maps ({filterCount} filtered)";
+                }
+                else if (allMapsCopy.Count > 0)
+                {
+                    StatusMessage = $"Showing all {allMapsCopy.Count} maps";
+                }
             });
-        }
-
-        FilteredMaps.Clear();
-        foreach (MapItemViewModel map in filtered)
-        {
-            FilteredMaps.Add(map);
-        }
-
-        int filterCount = _allMaps.Count - FilteredMaps.Count;
-        if (filterCount > 0)
-        {
-            StatusMessage = $"Showing {FilteredMaps.Count} of {_allMaps.Count} maps ({filterCount} filtered)";
-        }
-        else if (_allMaps.Count > 0)
-        {
-            StatusMessage = $"Showing all {_allMaps.Count} maps";
-        }
+        }, cancellationToken);
     }
 
     [RelayCommand]
@@ -428,17 +455,18 @@ public partial class MainWindowViewModel : ViewModelBase
         SelectedFormat = null;
         SelectedHasUnderground = null;
 
-        foreach (var filter in FactionFilters)
+        foreach (FactionFilterItemViewModel filter in FactionFilters)
         {
             filter.IsSelected = false;
         }
 
-        foreach (var filter in SpellFilters)
+        foreach (SpellFilterItemViewModel filter in SpellFilters)
         {
             filter.IsSelected = false;
         }
 
         UpdateSelectedSpellCount();
+        ApplyFiltersAndSort();
     }
 
     [RelayCommand]
