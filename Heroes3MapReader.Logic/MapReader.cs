@@ -196,7 +196,7 @@ public sealed class MapReader : IMapReader
     {
         if (features.VersionFlags.IsSoDOrHigher)
         {
-            mapInfo.AvailableSpells = reader.ReadBytes(features.ByteSizes.SpellsBytes);
+            mapInfo.AvailableSpells = ParseAvailableSpells(reader.ReadBytes(features.ByteSizes.SpellsBytes), features.Counts.SpellsCount);
             mapInfo.AvailableSecondarySkills = reader.ReadBytes(features.ByteSizes.SkillsBytes);
         }
     }
@@ -797,6 +797,36 @@ public sealed class MapReader : IMapReader
         }
 
         return allowedFactions;
+    }
+
+    /// <summary>
+    /// Parses a bitmask of available (not banned) spells
+    /// </summary>
+    /// <param name="spellBytes">The byte array containing the spell availability bitmask</param>
+    /// <param name="spellsCount">Total number of spells in this map format</param>
+    /// <returns>List of available spells</returns>
+    private static List<SpellType> ParseAvailableSpells(byte[] spellBytes, int spellsCount)
+    {
+        var availableSpells = new List<SpellType>();
+
+        for (int byteIndex = 0; byteIndex < spellBytes.Length; byteIndex++)
+        {
+            byte mask = spellBytes[byteIndex];
+            for (int bit = 0; bit < 8; bit++)
+            {
+                int spellIndex = byteIndex * 8 + bit;
+                if (spellIndex < spellsCount)
+                {
+                    bool isAvailable = (mask & (1 << bit)) != 0;
+                    if (isAvailable && Enum.IsDefined(typeof(SpellType), spellIndex))
+                    {
+                        availableSpells.Add((SpellType)spellIndex);
+                    }
+                }
+            }
+        }
+
+        return availableSpells;
     }
 
     private static TerrainTile ReadTerrainTile(BinaryReader reader)

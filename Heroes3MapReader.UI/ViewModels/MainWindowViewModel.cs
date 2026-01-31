@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,6 +12,8 @@ using Heroes3MapReader.Logic;
 using Heroes3MapReader.Logic.Interfaces;
 using Heroes3MapReader.Logic.Models;
 using Heroes3MapReader.Logic.Models.Enums;
+using Heroes3MapReader.UI.Factories;
+using Heroes3MapReader.UI.Views;
 
 namespace Heroes3MapReader.UI.ViewModels;
 
@@ -54,17 +57,23 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private byte[]? _minimapImage;
 
+    [ObservableProperty]
+    private int _selectedSpellCount;
+
     public ObservableCollection<FactionFilterItemViewModel> FactionFilters { get; } = [];
+    public ObservableCollection<SpellFilterItemViewModel> SpellFilters { get; } = [];
 
     private readonly List<MapItemViewModel> _allMaps = [];
 
     private readonly IMapReaderFactory _mapReaderFactory;
     private readonly IStorageProvider _storageProvider;
+    private readonly ISpellSelectionWindowFactory _spellSelectionWindowFactory;
 
-    public MainWindowViewModel(IMapReaderFactory mapReaderFactory, IStorageProvider storageProvider)
+    public MainWindowViewModel(IMapReaderFactory mapReaderFactory, IStorageProvider storageProvider, ISpellSelectionWindowFactory spellSelectionWindowFactory)
     {
         _mapReaderFactory = mapReaderFactory;
         _storageProvider = storageProvider;
+        _spellSelectionWindowFactory = spellSelectionWindowFactory;
         MapSizes = Enum.GetValues<MapSize>().Cast<MapSize?>().Prepend(null).ToList();
         PlayerCounts = Enumerable.Range(1, 8).Cast<int?>().Prepend(null).ToList();
         TeamCounts = Enumerable.Range(2, 6).Cast<int?>().Prepend(0).Prepend(null).ToList();
@@ -83,6 +92,20 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             };
             FactionFilters.Add(item);
+        }
+
+        foreach (SpellType spell in Enum.GetValues<SpellType>())
+        {
+            var item = new SpellFilterItemViewModel(spell);
+            item.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(SpellFilterItemViewModel.IsSelected))
+                {
+                    UpdateSelectedSpellCount();
+                    ApplyFiltersAndSort();
+                }
+            };
+            SpellFilters.Add(item);
         }
     }
 
@@ -368,6 +391,15 @@ public partial class MainWindowViewModel : ViewModelBase
             });
         }
 
+        var selectedSpells = SpellFilters.Where(f => f.IsSelected).Select(f => f.Spell).ToList();
+        if (selectedSpells.Count > 0)
+        {
+            filtered = filtered.Where(m =>
+            {
+                return selectedSpells.All(spell => m.Map.AvailableSpells.Contains(spell));
+            });
+        }
+
         FilteredMaps.Clear();
         foreach (MapItemViewModel map in filtered)
         {
@@ -396,5 +428,44 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             filter.IsSelected = false;
         }
+
+        foreach (var filter in SpellFilters)
+        {
+            filter.IsSelected = false;
+        }
+
+        UpdateSelectedSpellCount();
+    }
+
+    [RelayCommand]
+    private async Task OpenSpellSelection(Window? parentWindow)
+    {
+        if (parentWindow == null)
+        {
+            return;
+        }
+
+        SpellSelectionWindow spellWindow = _spellSelectionWindowFactory.Create();
+        var viewModel = (SpellSelectionWindowViewModel)spellWindow.DataContext!;
+        viewModel.SetSelectedSpells(SpellFilters);
+
+        await spellWindow.ShowDialog(parentWindow);
+
+        // Update main window filters from dialog selections
+        foreach (SpellFilterItemViewModel dialogSpell in viewModel.SpellFilters)
+        {
+            SpellFilterItemViewModel? mainSpell = SpellFilters.FirstOrDefault(s => s.Spell == dialogSpell.Spell);
+            if (mainSpell != null)
+            {
+                mainSpell.IsSelected = dialogSpell.IsSelected;
+            }
+        }
+
+        UpdateSelectedSpellCount();
+    }
+
+    private void UpdateSelectedSpellCount()
+    {
+        SelectedSpellCount = SpellFilters.Count(f => f.IsSelected);
     }
 }

@@ -88,17 +88,17 @@ public sealed class MapInfo
     public List<CustomHero> CustomHeroes { get; set; } = new();
 
     /// <summary>
-    /// Available artifacts
+    /// Available artifacts (raw bitfield data)
     /// </summary>
     public byte[]? AvailableArtifacts { get; set; }
 
     /// <summary>
-    /// Available spells
+    /// List of available (not banned) spells on the map
     /// </summary>
-    public byte[]? AvailableSpells { get; set; }
+    public List<SpellType> AvailableSpells { get; set; } = new();
 
     /// <summary>
-    /// Available secondary skills
+    /// Available secondary skills (raw bitfield data)
     /// </summary>
     public byte[]? AvailableSecondarySkills { get; set; }
 
