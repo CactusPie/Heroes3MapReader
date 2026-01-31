@@ -33,9 +33,6 @@ public partial class MainWindowViewModel : ViewModelBase
     private bool _isLoading;
 
     [ObservableProperty]
-    private MapSize? _selectedSize;
-
-    [ObservableProperty]
     private int? _selectedPlayerCount;
 
     [ObservableProperty]
@@ -73,6 +70,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public ObservableCollection<FactionFilterItemViewModel> FactionFilters { get; } = [];
     public ObservableCollection<SpellFilterItemViewModel> SpellFilters { get; } = [];
+    public ObservableCollection<MapSizeFilterItemViewModel> MapSizeFilters { get; } = [];
 
     private readonly List<MapItemViewModel> _allMaps = [];
 
@@ -86,7 +84,6 @@ public partial class MainWindowViewModel : ViewModelBase
         _mapReaderFactory = mapReaderFactory;
         _storageProvider = storageProvider;
         _spellSelectionWindowFactory = spellSelectionWindowFactory;
-        MapSizes = Enum.GetValues<MapSize>().Cast<MapSize?>().Prepend(null).ToList();
         PlayerCounts = Enumerable.Range(1, 8).Cast<int?>().Prepend(null).ToList();
         TeamCounts = Enumerable.Range(2, 6).Cast<int?>().Prepend(0).Prepend(null).ToList();
         Difficulties = Enum.GetValues<MapDifficulty>().Cast<MapDifficulty?>().Prepend(null).ToList();
@@ -106,6 +103,19 @@ public partial class MainWindowViewModel : ViewModelBase
             FactionFilters.Add(item);
         }
 
+        foreach (MapSize mapSize in Enum.GetValues<MapSize>())
+        {
+            var item = new MapSizeFilterItemViewModel(mapSize);
+            item.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(MapSizeFilterItemViewModel.IsSelected))
+                {
+                    ApplyFiltersAndSort();
+                }
+            };
+            MapSizeFilters.Add(item);
+        }
+
         foreach (SpellType spell in Enum.GetValues<SpellType>())
         {
             var item = new SpellFilterItemViewModel(spell);
@@ -121,7 +131,6 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public List<MapSize?> MapSizes { get; }
     public List<int?> PlayerCounts { get; }
     public List<int?> TeamCounts { get; }
     public List<MapDifficulty?> Difficulties { get; }
@@ -130,11 +139,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public List<bool?> HasUndergroundOptions { get; } = [null, true, false];
 
     public bool CanLoadMaps => !string.IsNullOrWhiteSpace(DirectoryPath) && !IsLoading;
-
-    partial void OnSelectedSizeChanged(MapSize? value)
-    {
-        ApplyFiltersAndSort();
-    }
 
     partial void OnSelectedPlayerCountChanged(int? value)
     {
@@ -381,7 +385,7 @@ public partial class MainWindowViewModel : ViewModelBase
         CancellationToken cancellationToken = _filterCancellationTokenSource.Token;
 
         // Capture current filter values to use in background thread
-        MapSize? selectedSize = SelectedSize;
+        List<MapSize> selectedSizes = MapSizeFilters.Where(f => f.IsSelected).Select(f => f.MapSize).ToList();
         int? selectedPlayerCount = SelectedPlayerCount;
         int? selectedTeamCount = SelectedTeamCount;
         MapDifficulty? selectedDifficulty = SelectedDifficulty;
@@ -396,9 +400,9 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             IEnumerable<MapItemViewModel> filtered = allMapsCopy.AsEnumerable();
 
-            if (selectedSize.HasValue)
+            if (selectedSizes.Count > 0)
             {
-                filtered = filtered.Where(m => m.Map.Size == selectedSize.Value);
+                filtered = filtered.Where(m => selectedSizes.Contains(m.Map.Size));
             }
 
             if (selectedPlayerCount.HasValue)
@@ -474,7 +478,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void ClearFilters()
     {
-        SelectedSize = null;
         SelectedPlayerCount = null;
         SelectedTeamCount = null;
         SelectedDifficulty = null;
@@ -488,6 +491,11 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         foreach (SpellFilterItemViewModel filter in SpellFilters)
+        {
+            filter.IsSelected = false;
+        }
+
+        foreach (MapSizeFilterItemViewModel filter in MapSizeFilters)
         {
             filter.IsSelected = false;
         }

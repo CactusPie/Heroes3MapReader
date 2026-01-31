@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Heroes3MapReader.UI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="200"
+             x:Class="Heroes3MapReader.UI.Views.MapSizeFilterControl"
+             x:DataType="vm:MapSizeFilterItemViewModel"
+             Name="MapSizeFilterCtrl">
+
+    <Expander IsExpanded="False"
+              Classes="compact"
+              Background="Transparent"
+              Margin="0,0,0,0"
+              HorizontalAlignment="Stretch">
+        <Expander.Header>
+            <TextBlock Text="Map Size" FontWeight="SemiBold"/>
+        </Expander.Header>
+        <ItemsControl ItemsSource="{Binding #MapSizeFilterCtrl.MapSizeFilters}" Margin="0">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding Name}"
+                              IsChecked="{Binding IsSelected}"
+                              Margin="0,-2"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Expander>
+</UserControl>

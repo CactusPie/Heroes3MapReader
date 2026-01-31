@@ -10,6 +10,7 @@
              x:DataType="enums:FactionType">
 
     <Expander IsExpanded="False"
+              Classes="compact"
               Background="Transparent"
               Margin="0,-10,0,0"
               HorizontalAlignment="Stretch"
@@ -21,19 +22,7 @@
                            Foreground="{DynamicResource SystemAccentColor}"/>
             </StackPanel>
         </Expander.Header>
-        <Expander.Styles>
-            <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Padding" Value="0"/>
-                <Setter Property="MinHeight" Value="0"/>
-                <Setter Property="Cursor" Value="Hand"/>
-            </Style>
-            <Style Selector="Expander:down /template/ Border#ExpanderContent">
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Padding" Value="5,5,0,0"/>
-            </Style>
-        </Expander.Styles>
+        <StackPanel Margin="5,5,0,0">
         <ItemsControl ItemsSource="{Binding #FactionsExpander.((views:PlayableFactionsControl)Parent).Factions}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -42,5 +31,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        </StackPanel>
     </Expander>
 </UserControl>
