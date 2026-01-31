@@ -411,6 +411,10 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             StatusMessage = $"Showing {FilteredMaps.Count} of {_allMaps.Count} maps ({filterCount} filtered)";
         }
+        else if (_allMaps.Count > 0)
+        {
+            StatusMessage = $"Showing all {_allMaps.Count} maps";
+        }
     }
 
     [RelayCommand]
