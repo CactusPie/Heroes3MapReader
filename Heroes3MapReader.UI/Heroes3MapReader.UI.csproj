@@ -24,4 +24,13 @@
     <ItemGroup>
         <ProjectReference Include="..\Heroes3MapReader.Logic\Heroes3MapReader.Logic.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\SpellSelectionWindow.axaml.cs">
+        <DependentUpon>SpellSelectionWindow.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\PlayableFactionsControl.axaml.cs">
+        <DependentUpon>PlayableFactionsControl.axaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
 </Project>

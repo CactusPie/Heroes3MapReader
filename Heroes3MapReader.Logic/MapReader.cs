@@ -196,7 +196,7 @@ public sealed class MapReader : IMapReader
     {
         if (features.VersionFlags.IsSoDOrHigher)
         {
-            mapInfo.AvailableSpells = ParseAvailableSpells(reader.ReadBytes(features.ByteSizes.SpellsBytes), features.Counts.SpellsCount);
+            mapInfo.BannedSpells = ParseBannedSpells(reader.ReadBytes(features.ByteSizes.SpellsBytes), features.Counts.SpellsCount);
             mapInfo.AvailableSecondarySkills = reader.ReadBytes(features.ByteSizes.SkillsBytes);
         }
     }
@@ -805,9 +805,9 @@ public sealed class MapReader : IMapReader
     /// <param name="spellBytes">The byte array containing the spell availability bitmask</param>
     /// <param name="spellsCount">Total number of spells in this map format</param>
     /// <returns>List of available spells</returns>
-    private static List<SpellType> ParseAvailableSpells(byte[] spellBytes, int spellsCount)
+    private static List<SpellType> ParseBannedSpells(byte[] spellBytes, int spellsCount)
     {
-        var availableSpells = new List<SpellType>();
+        var bannedSpells = new List<SpellType>();
 
         for (int byteIndex = 0; byteIndex < spellBytes.Length; byteIndex++)
         {
@@ -815,18 +815,20 @@ public sealed class MapReader : IMapReader
             for (int bit = 0; bit < 8; bit++)
             {
                 int spellIndex = byteIndex * 8 + bit;
-                if (spellIndex < spellsCount)
+                if (spellIndex >= spellsCount)
                 {
-                    bool isAvailable = (mask & (1 << bit)) != 0;
-                    if (isAvailable && Enum.IsDefined(typeof(SpellType), spellIndex))
-                    {
-                        availableSpells.Add((SpellType)spellIndex);
-                    }
+                    continue;
+                }
+
+                bool isBanned = (mask & (1 << bit)) != 0;
+                if (isBanned && Enum.IsDefined(typeof(SpellType), spellIndex))
+                {
+                    bannedSpells.Add((SpellType)spellIndex);
                 }
             }
         }
 
-        return availableSpells;
+        return bannedSpells;
     }
 
     private static TerrainTile ReadTerrainTile(BinaryReader reader)

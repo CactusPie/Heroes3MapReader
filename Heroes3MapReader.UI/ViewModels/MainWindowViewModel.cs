@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
 using Heroes3MapReader.Logic;
 using Heroes3MapReader.Logic.Interfaces;
 using Heroes3MapReader.Logic.Models;
@@ -60,6 +61,12 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private int _selectedSpellCount;
+
+    [ObservableProperty]
+    private ObservableCollection<SpellType> _bannedSpells = [];
+
+    [ObservableProperty]
+    private ObservableCollection<FactionType> _playableFactions = [];
 
     [ObservableProperty]
     private ObservableCollection<MapItemViewModel> _filteredMaps = [];
@@ -171,6 +178,8 @@ public partial class MainWindowViewModel : ViewModelBase
         if (newValue == null)
         {
             MinimapImage = null;
+            BannedSpells.Clear();
+            PlayableFactions.Clear();
             return;
         }
 
@@ -183,6 +192,24 @@ public partial class MainWindowViewModel : ViewModelBase
                 MapInfo mapDetailsWithTerrain = reader.ReadMap(newValue.FilePath, true);
                 newValue.Map.SurfaceTerrain = mapDetailsWithTerrain.SurfaceTerrain;
                 newValue.Map.UndergroundTerrain = mapDetailsWithTerrain.UndergroundTerrain;
+            }
+
+            // Calculate banned spells (all spells minus available spells)
+            BannedSpells.Clear();
+            BannedSpells.AddRange(newValue.Map.BannedSpells.OrderBy(x => x.ToString()));
+
+            // Get playable factions (factions that human players can play)
+            List<FactionType> playableFactionsList = newValue.Map.Players
+                .Where(p => p.CanBeHuman)
+                .SelectMany(p => p.AllowedFactions)
+                .Distinct()
+                .OrderBy(f => f)
+                .ToList();
+
+            PlayableFactions.Clear();
+            foreach (FactionType faction in playableFactionsList)
+            {
+                PlayableFactions.Add(faction);
             }
 
             GenerateMinimap(newValue);
@@ -418,7 +445,7 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 filtered = filtered.Where(m =>
                 {
-                    return selectedSpells.All(spell => m.Map.AvailableSpells.Contains(spell));
+                    return selectedSpells.All(spell => !m.Map.BannedSpells.Contains(spell));
                 });
             }
 

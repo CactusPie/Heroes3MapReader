@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:Heroes3MapReader.UI.Converters"
+             xmlns:views="clr-namespace:Heroes3MapReader.UI.Views"
+             xmlns:enums="clr-namespace:Heroes3MapReader.Logic.Models.Enums;assembly=Heroes3MapReader.Logic"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+             x:Class="Heroes3MapReader.UI.Views.PlayableFactionsControl"
+             x:DataType="enums:FactionType">
+
+    <Expander IsExpanded="False"
+              Background="Transparent"
+              Margin="0,-10,0,0"
+              HorizontalAlignment="Stretch"
+              Name="FactionsExpander">
+        <Expander.Header>
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock Text="Playable Factions" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding #FactionsExpander.((views:PlayableFactionsControl)Parent).Factions.Count, StringFormat='({0})'}"
+                           Foreground="{DynamicResource SystemAccentColor}"/>
+            </StackPanel>
+        </Expander.Header>
+        <Expander.Styles>
+            <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="MinHeight" Value="0"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style>
+            <Style Selector="Expander:down /template/ Border#ExpanderContent">
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding" Value="5,5,0,0"/>
+            </Style>
+        </Expander.Styles>
+        <ItemsControl ItemsSource="{Binding #FactionsExpander.((views:PlayableFactionsControl)Parent).Factions}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={x:Static converters:FactionTypeConverter.Instance}}"
+                               Margin="0,2"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Expander>
+</UserControl>

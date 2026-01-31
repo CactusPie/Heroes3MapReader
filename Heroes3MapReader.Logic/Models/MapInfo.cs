@@ -95,7 +95,7 @@ public sealed class MapInfo
     /// <summary>
     /// List of available (not banned) spells on the map
     /// </summary>
-    public List<SpellType> AvailableSpells { get; set; } = new();
+    public List<SpellType> BannedSpells { get; set; } = new();
 
     /// <summary>
     /// Available secondary skills (raw bitfield data)
