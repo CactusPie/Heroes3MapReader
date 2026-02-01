@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SummonBoat" xml:space="preserve">
+    <value>Summon Boat</value>
+  </data>
+  <data name="ScuttleBoat" xml:space="preserve">
+    <value>Scuttle Boat</value>
+  </data>
+  <data name="Visions" xml:space="preserve">
+    <value>Visions</value>
+  </data>
+  <data name="ViewEarth" xml:space="preserve">
+    <value>View Earth</value>
+  </data>
+  <data name="Disguise" xml:space="preserve">
+    <value>Disguise</value>
+  </data>
+  <data name="ViewAir" xml:space="preserve">
+    <value>View Air</value>
+  </data>
+  <data name="Fly" xml:space="preserve">
+    <value>Fly</value>
+  </data>
+  <data name="WaterWalk" xml:space="preserve">
+    <value>Water Walk</value>
+  </data>
+  <data name="DimensionDoor" xml:space="preserve">
+    <value>Dimension Door</value>
+  </data>
+  <data name="TownPortal" xml:space="preserve">
+    <value>Town Portal</value>
+  </data>
+  <data name="Quicksand" xml:space="preserve">
+    <value>Quicksand</value>
+  </data>
+  <data name="LandMine" xml:space="preserve">
+    <value>Land Mine</value>
+  </data>
+  <data name="ForceField" xml:space="preserve">
+    <value>Force Field</value>
+  </data>
+  <data name="FireWall" xml:space="preserve">
+    <value>Fire Wall</value>
+  </data>
+  <data name="Earthquake" xml:space="preserve">
+    <value>Earthquake</value>
+  </data>
+  <data name="MagicArrow" xml:space="preserve">
+    <value>Magic Arrow</value>
+  </data>
+  <data name="IceBolt" xml:space="preserve">
+    <value>Ice Bolt</value>
+  </data>
+  <data name="LightningBolt" xml:space="preserve">
+    <value>Lightning Bolt</value>
+  </data>
+  <data name="Implosion" xml:space="preserve">
+    <value>Implosion</value>
+  </data>
+  <data name="ChainLightning" xml:space="preserve">
+    <value>Chain Lightning</value>
+  </data>
+  <data name="FrostRing" xml:space="preserve">
+    <value>Frost Ring</value>
+  </data>
+  <data name="Fireball" xml:space="preserve">
+    <value>Fireball</value>
+  </data>
+  <data name="Inferno" xml:space="preserve">
+    <value>Inferno</value>
+  </data>
+  <data name="MeteorShower" xml:space="preserve">
+    <value>Meteor Shower</value>
+  </data>
+  <data name="DeathRipple" xml:space="preserve">
+    <value>Death Ripple</value>
+  </data>
+  <data name="DestroyUndead" xml:space="preserve">
+    <value>Destroy Undead</value>
+  </data>
+  <data name="Armageddon" xml:space="preserve">
+    <value>Armageddon</value>
+  </data>
+  <data name="Shield" xml:space="preserve">
+    <value>Shield</value>
+  </data>
+  <data name="AirShield" xml:space="preserve">
+    <value>Air Shield</value>
+  </data>
+  <data name="FireShield" xml:space="preserve">
+    <value>Fire Shield</value>
+  </data>
+  <data name="ProtectionFromAir" xml:space="preserve">
+    <value>Protection from Air</value>
+  </data>
+  <data name="ProtectionFromFire" xml:space="preserve">
+    <value>Protection from Fire</value>
+  </data>
+  <data name="ProtectionFromWater" xml:space="preserve">
+    <value>Protection from Water</value>
+  </data>
+  <data name="ProtectionFromEarth" xml:space="preserve">
+    <value>Protection from Earth</value>
+  </data>
+  <data name="AntiMagic" xml:space="preserve">
+    <value>Anti-Magic</value>
+  </data>
+  <data name="Dispel" xml:space="preserve">
+    <value>Dispel</value>
+  </data>
+  <data name="MagicMirror" xml:space="preserve">
+    <value>Magic Mirror</value>
+  </data>
+  <data name="Cure" xml:space="preserve">
+    <value>Cure</value>
+  </data>
+  <data name="Resurrection" xml:space="preserve">
+    <value>Resurrection</value>
+  </data>
+  <data name="AnimateDead" xml:space="preserve">
+    <value>Animate Dead</value>
+  </data>
+  <data name="Sacrifice" xml:space="preserve">
+    <value>Sacrifice</value>
+  </data>
+  <data name="Bless" xml:space="preserve">
+    <value>Bless</value>
+  </data>
+  <data name="Bloodlust" xml:space="preserve">
+    <value>Bloodlust</value>
+  </data>
+  <data name="Precision" xml:space="preserve">
+    <value>Precision</value>
+  </data>
+  <data name="StoneSkin" xml:space="preserve">
+    <value>Stone Skin</value>
+  </data>
+  <data name="Prayer" xml:space="preserve">
+    <value>Prayer</value>
+  </data>
+  <data name="Mirth" xml:space="preserve">
+    <value>Mirth</value>
+  </data>
+  <data name="Fortune" xml:space="preserve">
+    <value>Fortune</value>
+  </data>
+  <data name="Haste" xml:space="preserve">
+    <value>Haste</value>
+  </data>
+  <data name="Slayer" xml:space="preserve">
+    <value>Slayer</value>
+  </data>
+  <data name="Frenzy" xml:space="preserve">
+    <value>Frenzy</value>
+  </data>
+  <data name="Counterstrike" xml:space="preserve">
+    <value>Counterstrike</value>
+  </data>
+  <data name="Curse" xml:space="preserve">
+    <value>Curse</value>
+  </data>
+  <data name="Weakness" xml:space="preserve">
+    <value>Weakness</value>
+  </data>
+  <data name="DisruptingRay" xml:space="preserve">
+    <value>Disrupting Ray</value>
+  </data>
+  <data name="Sorrow" xml:space="preserve">
+    <value>Sorrow</value>
+  </data>
+  <data name="Misfortune" xml:space="preserve">
+    <value>Misfortune</value>
+  </data>
+  <data name="Slow" xml:space="preserve">
+    <value>Slow</value>
+  </data>
+  <data name="Berserk" xml:space="preserve">
+    <value>Berserk</value>
+  </data>
+  <data name="Hypnotize" xml:space="preserve">
+    <value>Hypnotize</value>
+  </data>
+  <data name="Forgetfulness" xml:space="preserve">
+    <value>Forgetfulness</value>
+  </data>
+  <data name="Blind" xml:space="preserve">
+    <value>Blind</value>
+  </data>
+  <data name="Teleport" xml:space="preserve">
+    <value>Teleport</value>
+  </data>
+  <data name="RemoveObstacle" xml:space="preserve">
+    <value>Remove Obstacle</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Clone</value>
+  </data>
+  <data name="SummonFireElemental" xml:space="preserve">
+    <value>Summon Fire Elemental</value>
+  </data>
+  <data name="SummonEarthElemental" xml:space="preserve">
+    <value>Summon Earth Elemental</value>
+  </data>
+  <data name="SummonWaterElemental" xml:space="preserve">
+    <value>Summon Water Elemental</value>
+  </data>
+  <data name="SummonAirElemental" xml:space="preserve">
+    <value>Summon Air Elemental</value>
+  </data>
+  <data name="StoneGaze" xml:space="preserve">
+    <value>Stone Gaze</value>
+  </data>
+  <data name="Poison" xml:space="preserve">
+    <value>Poison</value>
+  </data>
+  <data name="Bind" xml:space="preserve">
+    <value>Bind</value>
+  </data>
+  <data name="Disease" xml:space="preserve">
+    <value>Disease</value>
+  </data>
+  <data name="Paralyze" xml:space="preserve">
+    <value>Paralyze</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="DeathCloud" xml:space="preserve">
+    <value>Death Cloud</value>
+  </data>
+  <data name="Thunderbolt" xml:space="preserve">
+    <value>Thunderbolt</value>
+  </data>
+  <data name="DispelHelpful" xml:space="preserve">
+    <value>Dispel Helpful</value>
+  </data>
+  <data name="DeathStare" xml:space="preserve">
+    <value>Death Stare</value>
+  </data>
+  <data name="AcidBreath" xml:space="preserve">
+    <value>Acid Breath</value>
+  </data>
+  <data name="AcidBreathDamage" xml:space="preserve">
+    <value>Acid Breath Damage</value>
+  </data>
+</root>

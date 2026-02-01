@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Heroes3MapReader.UI.ViewModels"
+        xmlns:converters="clr-namespace:Heroes3MapReader.UI.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="600"
@@ -42,7 +43,7 @@
                 <ItemsControl ItemsSource="{Binding SpellFilters}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <CheckBox Content="{Binding Name}"
+                            <CheckBox Content="{Binding Spell, Converter={x:Static converters:SpellTypeConverter.Instance}}"
                                       IsChecked="{Binding IsSelected}"
                                       Margin="0,3"/>
                         </DataTemplate>

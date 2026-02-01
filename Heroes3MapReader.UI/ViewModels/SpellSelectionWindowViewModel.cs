@@ -1,8 +1,10 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Globalization;
 using CommunityToolkit.Mvvm.Input;
 using Heroes3MapReader.Logic.Models.Enums;
+using Heroes3MapReader.UI.Resources;
 
 namespace Heroes3MapReader.UI.ViewModels;
 
@@ -12,9 +14,13 @@ public partial class SpellSelectionWindowViewModel : ViewModelBase
 
     public SpellSelectionWindowViewModel()
     {
-        foreach (SpellType spell in Enum.GetValues<SpellType>())
+        var spells = Enum.GetValues<SpellType>()
+            .Select(s => new SpellFilterItemViewModel(s))
+            .OrderBy(vm => SpellNames.ResourceManager.GetString(vm.Spell.ToString()) ?? vm.Spell.ToString());
+
+        foreach (var spell in spells)
         {
-            SpellFilters.Add(new SpellFilterItemViewModel(spell));
+            SpellFilters.Add(spell);
         }
     }
 

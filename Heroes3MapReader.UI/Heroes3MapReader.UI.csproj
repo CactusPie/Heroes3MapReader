@@ -26,6 +26,48 @@
     </ItemGroup>
 
     <ItemGroup>
+        <EmbeddedResource Update="Resources\SpellNames.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>SpellNames.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\FactionNames.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>FactionNames.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\MapFormatNames.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>MapFormatNames.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\VictoryConditionNames.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>VictoryConditionNames.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Resources\SpellNames.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>SpellNames.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\FactionNames.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>FactionNames.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\MapFormatNames.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>MapFormatNames.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\VictoryConditionNames.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>VictoryConditionNames.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
       <Compile Update="Views\SpellSelectionWindow.axaml.cs">
         <DependentUpon>SpellSelectionWindow.axaml</DependentUpon>
       </Compile>
