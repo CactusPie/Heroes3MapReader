@@ -5,6 +5,7 @@ using Avalonia.Platform.Storage;
 using Heroes3MapReader.Logic;
 using Heroes3MapReader.Logic.Interfaces;
 using Heroes3MapReader.Logic.MapSpecificationLogic;
+using Heroes3MapReader.Logic.Repositories;
 using Heroes3MapReader.UI.Factories;
 using Heroes3MapReader.UI.ViewModels;
 using Heroes3MapReader.UI.Views;
@@ -32,6 +33,7 @@ public partial class App : Application
             services.AddSingleton<IStreamDecompressor, StreamDecompressor>();
             services.AddTransient<IStorageProvider>(_ => mainWindow.StorageProvider);
             services.AddSingleton<ISpellSelectionWindowFactory, SpellSelectionWindowFactory>();
+            services.AddSingleton<ISettingsRepository, SettingsRepository>();
             services.AddSingleton<MainWindowViewModel>();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();

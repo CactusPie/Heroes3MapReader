@@ -14,6 +14,7 @@ using Heroes3MapReader.Logic;
 using Heroes3MapReader.Logic.Interfaces;
 using Heroes3MapReader.Logic.Models;
 using Heroes3MapReader.Logic.Models.Enums;
+using Heroes3MapReader.Logic.Repositories;
 using Heroes3MapReader.UI.Factories;
 using Heroes3MapReader.UI.Views;
 
@@ -77,13 +78,19 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly IMapReaderFactory _mapReaderFactory;
     private readonly IStorageProvider _storageProvider;
     private readonly ISpellSelectionWindowFactory _spellSelectionWindowFactory;
+    private readonly ISettingsRepository _settingsRepository;
     private CancellationTokenSource? _filterCancellationTokenSource;
 
-    public MainWindowViewModel(IMapReaderFactory mapReaderFactory, IStorageProvider storageProvider, ISpellSelectionWindowFactory spellSelectionWindowFactory)
+    public MainWindowViewModel(
+        IMapReaderFactory mapReaderFactory,
+        IStorageProvider storageProvider,
+        ISpellSelectionWindowFactory spellSelectionWindowFactory,
+        ISettingsRepository settingsRepository)
     {
         _mapReaderFactory = mapReaderFactory;
         _storageProvider = storageProvider;
         _spellSelectionWindowFactory = spellSelectionWindowFactory;
+        _settingsRepository = settingsRepository;
         PlayerCounts = Enumerable.Range(1, 8).Cast<int?>().Prepend(null).ToList();
         TeamCounts = Enumerable.Range(2, 6).Cast<int?>().Prepend(0).Prepend(null).ToList();
         Difficulties = Enum.GetValues<MapDifficulty>().Cast<MapDifficulty?>().Prepend(null).ToList();
@@ -128,6 +135,17 @@ public partial class MainWindowViewModel : ViewModelBase
                 }
             };
             SpellFilters.Add(item);
+        }
+
+        LoadSettings();
+    }
+
+    private void LoadSettings()
+    {
+        AppSettings settings = _settingsRepository.LoadSettings();
+        if (!string.IsNullOrWhiteSpace(settings.LastUsedDirectory) && Directory.Exists(settings.LastUsedDirectory))
+        {
+            DirectoryPath = settings.LastUsedDirectory;
         }
     }
 
@@ -269,6 +287,8 @@ public partial class MainWindowViewModel : ViewModelBase
             StatusMessage = "Invalid directory path";
             return;
         }
+
+        SaveApplicationSettings();
 
         IsLoading = true;
         StatusMessage = "Scanning for maps...";
@@ -534,5 +554,14 @@ public partial class MainWindowViewModel : ViewModelBase
     private void UpdateSelectedSpellCount()
     {
         SelectedSpellCount = SpellFilters.Count(f => f.IsSelected);
+    }
+
+    private void SaveApplicationSettings()
+    {
+        var settings = new AppSettings
+        {
+            LastUsedDirectory = DirectoryPath,
+        };
+        _settingsRepository.SaveSettings(settings);
     }
 }
