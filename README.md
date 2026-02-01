@@ -12,10 +12,13 @@ Currently supports all vanilla maps as well as HotA maps up to version 1.8 (Bulw
   - Player counts and specific player details
   - Victory and Loss conditions
   - Teams and Alliances
+  - Playable Factions
+  - Banned Spells
 - **Minimap Generation**: Renders visual previews of maps including terrain and underground levels.
 - **Map Browser**:
   - Scan directories for map files recursively.
   - Filter maps by Size, Player Count, Difficulty, Victory Condition, and Format.
+  - Filter by Playable Factions and Available Spells.
   - Sort and view map details in a responsive grid.
 - **Performance**: Multi-threaded loading for handling large collections of maps efficiently.
 
@@ -56,7 +59,7 @@ Currently supports all vanilla maps as well as HotA maps up to version 1.8 (Bulw
 1. Launch the application.
 2. Click **"Select Map Directory"** to choose a folder containing `.h3m` files (e.g., your Heroes 3 `Maps` directory).
 3. Click **"Load Maps"** to scan the directory.
-4. Use the dropdown filters at the top to narrow down the list of maps.
+4. Use the filters at the top (including Factions and Spells) to narrow down the list of maps.
 5. Select a map from the list to view its generated minimap and detailed information.
 
 ## Project Structure
