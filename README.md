@@ -4,6 +4,8 @@ A modern, cross-platform utility for reading, analyzing, and visualizing Heroes 
 
 Currently supports all vanilla maps as well as HotA maps up to version 1.8 (Bulwark).
 
+<img width="1920" height="1016" alt="image" src="https://github.com/user-attachments/assets/4f7055b8-37f4-495f-bd3a-d64631d335a3" />
+
 ## Features
 
 - **Map Parsing**: Reads detailed metadata from `.h3m` files including:
