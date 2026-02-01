@@ -306,7 +306,7 @@
                             </StackPanel>
 
                             <!-- Map Stats -->
-                            <StackPanel Spacing="5">
+                            <StackPanel Spacing="5" Margin="0 0 0 -10">
                                 <TextBlock Text="Map Details" FontWeight="SemiBold"/>
                                 <Grid ColumnDefinitions="Auto,10,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
                                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Size:" FontWeight="Medium" Margin="0,0,0,5"/>
@@ -336,13 +336,13 @@
 
                                     <TextBlock Grid.Row="6" Grid.Column="0" Text="File Path:" FontWeight="Medium" Margin="0,0,0,5"/>
                                     <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding SelectedMap.FilePath}"
-                                               MaxWidth="400"
+                                               MaxWidth="370"
                                                TextWrapping="Wrap" Margin="0,0,0,5" />
                                 </Grid>
                             </StackPanel>
 
                             <!-- Playable Factions -->
-                            <views:PlayableFactionsControl Factions="{Binding PlayableFactions}" />
+                            <views:PlayableFactionsControl Margin="0 0 0 -10" Factions="{Binding PlayableFactions}" />
 
                             <!-- Banned Spells -->
                             <views:BannedSpellsControl Spells="{Binding BannedSpells}" />
