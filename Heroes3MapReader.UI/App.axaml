@@ -1,7 +1,18 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:Heroes3MapReader.UI.Converters"
              x:Class="Heroes3MapReader.UI.App"
              RequestedThemeVariant="Default">
+    <Application.Resources>
+        <converters:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
+        <converters:FactionTypeConverter x:Key="FactionTypeConverter"/>
+        <converters:MapFormatConverter x:Key="MapFormatConverter"/>
+        <converters:NullableBoolConverter x:Key="NullableBoolConverter"/>
+        <converters:NullableEnumConverter x:Key="NullableEnumConverter"/>
+        <converters:NullableIntConverter x:Key="NullableIntConverter"/>
+        <converters:SpellTypeConverter x:Key="SpellTypeConverter"/>
+        <converters:VictoryConditionConverter x:Key="VictoryConditionConverter"/>
+    </Application.Resources>
     <Application.Styles>
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>

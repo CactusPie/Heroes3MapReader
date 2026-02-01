@@ -43,7 +43,7 @@
                 <ItemsControl ItemsSource="{Binding SpellFilters}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <CheckBox Content="{Binding Spell, Converter={x:Static converters:SpellTypeConverter.Instance}}"
+                            <CheckBox Content="{Binding Spell, Converter={StaticResource SpellTypeConverter}}"
                                       IsChecked="{Binding IsSelected}"
                                       Margin="0,3"/>
                         </DataTemplate>

@@ -8,8 +8,6 @@ namespace Heroes3MapReader.UI.Converters;
 
 public sealed class ByteArrayToImageConverter : IValueConverter
 {
-    public static readonly ByteArrayToImageConverter Instance = new();
-
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not byte[] imageData || imageData.Length <= 0)

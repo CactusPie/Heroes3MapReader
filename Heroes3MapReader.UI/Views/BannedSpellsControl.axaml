@@ -26,7 +26,7 @@
             <ItemsControl ItemsSource="{Binding #SpellsExpander.((views:BannedSpellsControl)Parent).Spells}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Converter={x:Static converters:SpellTypeConverter.Instance}}"
+                        <TextBlock Text="{Binding Converter={StaticResource SpellTypeConverter}}"
                                    Margin="0,2"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

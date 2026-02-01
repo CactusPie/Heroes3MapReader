@@ -6,8 +6,6 @@ namespace Heroes3MapReader.UI.Converters;
 
 public sealed class NullableIntConverter : IValueConverter
 {
-    public static readonly NullableIntConverter Instance = new();
-
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         return value == null ? "All" : value.ToString();

@@ -8,8 +8,6 @@ namespace Heroes3MapReader.UI.Converters;
 
 public sealed class FactionTypeConverter : IValueConverter
 {
-    public static readonly FactionTypeConverter Instance = new();
-
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is FactionType factionType)

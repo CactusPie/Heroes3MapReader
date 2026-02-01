@@ -26,7 +26,7 @@
         <ItemsControl ItemsSource="{Binding #FactionsExpander.((views:PlayableFactionsControl)Parent).Factions}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Converter={x:Static converters:FactionTypeConverter.Instance}}"
+                    <TextBlock Text="{Binding Converter={StaticResource FactionTypeConverter}}"
                                Margin="0,2"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

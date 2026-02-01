@@ -6,8 +6,6 @@ namespace Heroes3MapReader.UI.Converters;
 
 public sealed class NullableBoolConverter : IValueConverter
 {
-    public static readonly NullableBoolConverter Instance = new();
-
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is bool b)

@@ -8,8 +8,6 @@ namespace Heroes3MapReader.UI.Converters;
 
 public sealed class VictoryConditionConverter : IValueConverter
 {
-    public static readonly VictoryConditionConverter Instance = new();
-
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value == null)

@@ -8,8 +8,6 @@ namespace Heroes3MapReader.UI.Converters;
 
 public sealed class SpellTypeConverter : IValueConverter
 {
-    public static readonly SpellTypeConverter Instance = new();
-
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is SpellType spellType)

@@ -59,7 +59,7 @@
                                   HorizontalAlignment="Stretch">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={x:Static converters:NullableIntConverter.Instance}}"/>
+                                    <TextBlock Text="{Binding Converter={StaticResource NullableIntConverter}}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -73,7 +73,7 @@
                                   HorizontalAlignment="Stretch">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={x:Static converters:NullableIntConverter.Instance}}"/>
+                                    <TextBlock Text="{Binding Converter={StaticResource NullableIntConverter}}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -87,7 +87,7 @@
                                   HorizontalAlignment="Stretch">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={x:Static converters:NullableEnumConverter.Instance}}"/>
+                                    <TextBlock Text="{Binding Converter={StaticResource NullableEnumConverter}}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -101,7 +101,7 @@
                                   HorizontalAlignment="Stretch">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={x:Static converters:VictoryConditionConverter.Instance}}"/>
+                                    <TextBlock Text="{Binding Converter={StaticResource VictoryConditionConverter}}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -115,7 +115,7 @@
                                   HorizontalAlignment="Stretch">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={x:Static converters:MapFormatConverter.Instance}}"/>
+                                    <TextBlock Text="{Binding Converter={StaticResource MapFormatConverter}}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -129,7 +129,7 @@
                                   HorizontalAlignment="Stretch">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={x:Static converters:NullableBoolConverter.Instance}}"/>
+                                    <TextBlock Text="{Binding Converter={StaticResource NullableBoolConverter}}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -207,7 +207,7 @@
                                             Width="*"
                                             MinWidth="200"/>
                         <DataGridTextColumn Header="Format"
-                                            Binding="{Binding Map.Format, Converter={x:Static converters:MapFormatConverter.Instance}, Mode=OneWay}"
+                                            Binding="{Binding Map.Format, Converter={StaticResource MapFormatConverter}, Mode=OneWay}"
                                             Width="80"/>
                         <DataGridTextColumn Header="Size"
                                             Binding="{Binding Map.Size}"
@@ -223,7 +223,7 @@
                                             Binding="{Binding Map.Difficulty}"
                                             Width="100"/>
                         <DataGridTextColumn Header="Victory"
-                                            Binding="{Binding Map.VictoryCondition.Type, Converter={x:Static converters:VictoryConditionConverter.Instance}, Mode=OneWay}"
+                                            Binding="{Binding Map.VictoryCondition.Type, Converter={StaticResource VictoryConditionConverter}, Mode=OneWay}"
                                             Width="150" />
                         <DataGridTextColumn Width="90"
                                             SortMemberPath="Map.Width">
@@ -298,7 +298,7 @@
                                         BorderThickness="1"
                                         CornerRadius="3"
                                         HorizontalAlignment="Center">
-                                    <Image Source="{Binding MinimapImage, Converter={x:Static converters:ByteArrayToImageConverter.Instance}}"
+                                    <Image Source="{Binding MinimapImage, Converter={StaticResource ByteArrayToImageConverter}}"
                                            Stretch="Uniform"
                                            MaxWidth="360"
                                            MaxHeight="400"
@@ -317,7 +317,7 @@
                                     <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding SelectedMap.Map.Size}" Margin="0,0,0,5"/>
 
                                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Format:" FontWeight="Medium" Margin="0,0,0,5"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SelectedMap.Map.Format, Converter={x:Static converters:MapFormatConverter.Instance}}" Margin="0,0,0,5"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SelectedMap.Map.Format, Converter={StaticResource MapFormatConverter}}" Margin="0,0,0,5"/>
 
                                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Dimensions:" FontWeight="Medium" Margin="0,0,0,5"/>
                                     <TextBlock Grid.Row="2" Grid.Column="2" Margin="0,0,0,5">
