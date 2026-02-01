@@ -39,13 +39,13 @@
         </StackPanel>
 
         <!-- Main Content -->
-        <Grid Grid.Row="1" ColumnDefinitions="250,*,400">
+        <Grid Grid.Row="1" ColumnDefinitions="250,10,*,10,400">
             <!-- Filters Panel -->
             <Border Grid.Column="0"
                     BorderBrush="{DynamicResource SystemAccentColor}"
                     BorderThickness="1"
                     Padding="10"
-                    Margin="0,0,10,0"
+                    Margin="0"
                     CornerRadius="5">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,10,0">
                 <StackPanel Spacing="15">
@@ -186,12 +186,14 @@
                 </ScrollViewer>
             </Border>
 
+            <GridSplitter Grid.Column="1" Width="10" ResizeBehavior="PreviousAndNext" Background="Transparent"/>
+
             <!-- Map List -->
-            <Border Grid.Column="1"
+            <Border Grid.Column="2"
                     BorderBrush="{DynamicResource SystemAccentColor}"
                     BorderThickness="1"
                     CornerRadius="5"
-                    Margin="0,0,10,0">
+                    Margin="0">
                 <DataGrid ItemsSource="{Binding FilteredMaps}"
                           SelectedItem="{Binding SelectedMap}"
                           IsReadOnly="True"
@@ -242,13 +244,15 @@
                 </DataGrid>
             </Border>
 
+            <GridSplitter Grid.Column="3" Width="10" ResizeBehavior="PreviousAndNext" Background="Transparent"/>
+
             <!-- Visualization Panel -->
-            <Border Grid.Column="2"
+            <Border Grid.Column="4"
                     BorderBrush="{DynamicResource SystemAccentColor}"
                     BorderThickness="1"
                     CornerRadius="5"
                     Padding="10">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                               VerticalScrollBarVisibility="Auto">
                     <StackPanel Spacing="10">
                         <TextBlock Text="Map Visualization"
@@ -336,7 +340,6 @@
 
                                     <TextBlock Grid.Row="6" Grid.Column="0" Text="File Path:" FontWeight="Medium" Margin="0,0,0,5"/>
                                     <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding SelectedMap.FilePath}"
-                                               MaxWidth="370"
                                                TextWrapping="Wrap" Margin="0,0,0,5" />
                                 </Grid>
                             </StackPanel>
