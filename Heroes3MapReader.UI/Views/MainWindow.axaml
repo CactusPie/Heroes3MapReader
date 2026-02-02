@@ -8,7 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="700"
         x:Class="Heroes3MapReader.UI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="Heroes 3 Map Browser"
+        Title="Heroes 3 Map Browser v1.5.0"
         Width="1200"
         Height="700">
 
