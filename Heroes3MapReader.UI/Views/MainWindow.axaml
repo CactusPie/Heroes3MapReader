@@ -8,13 +8,34 @@
         mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="700"
         x:Class="Heroes3MapReader.UI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="Heroes 3 Map Browser"
+        Title="Heroes 3 Map Browser v1.5.0"
         Width="1200"
         Height="700">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="TextBox.selectableLabel">
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="CaretBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Style.Resources>
+                <SolidColorBrush x:Key="TextControlBackgroundFocused">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="TextControlBackgroundPointerOver">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="TextControlBorderBrushPointerOver">Transparent</SolidColorBrush>
+            </Style.Resources>
+        </Style>
+        <Style Selector="TextBox.selectableLabel:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </Window.Styles>
 
     <Grid RowDefinitions="Auto,*,Auto" Margin="10">
         <!-- Directory Selection -->
@@ -278,21 +299,19 @@
 
                         <!-- Map Info -->
                         <Grid Grid.Row="0" RowDefinitions="Auto,*">
-                            <TextBlock Grid.Row="0"
-                                       Text="{Binding SelectedMap.Map.Name}"
-                                       FontWeight="Bold"
-                                       FontSize="14"
-                                       TextWrapping="Wrap"
-                                       Margin="0,0,0,5"/>
-                            <ScrollViewer Grid.Row="1"
-                                          Width="300"
-                                          IsVisible="{Binding SelectedMap.Map.Description, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                          VerticalScrollBarVisibility="Auto"
-                                          HorizontalScrollBarVisibility="Disabled">
-                                <TextBlock Text="{Binding SelectedMap.Map.Description}"
-                                           TextWrapping="Wrap"
-                                           Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
-                            </ScrollViewer>
+                            <TextBox Grid.Row="0"
+                                     Classes="selectableLabel"
+                                     Text="{Binding SelectedMap.Map.Name}"
+                                     FontWeight="Bold"
+                                     FontSize="14"
+                                     Margin="0,0,0,0"/>
+                            <TextBox Grid.Row="1"
+                                     Classes="selectableLabel"
+                                     Text="{Binding SelectedMap.Map.Description}"
+                                     IsVisible="{Binding SelectedMap.Map.Description, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                     Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
                         </Grid>
 
                         <GridSplitter Grid.Row="1"
@@ -364,8 +383,10 @@
                                         <TextBlock Grid.Row="5" Grid.Column="2" Text="{Binding SelectedMap.Map.HasUnderground}" Margin="0,0,0,5"/>
 
                                         <TextBlock Grid.Row="6" Grid.Column="0" Text="File Path:" FontWeight="Medium" Margin="0,0,0,5"/>
-                                        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding SelectedMap.FilePath}"
-                                                   TextWrapping="Wrap" Margin="0,0,0,5" />
+                                        <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3"
+                                                 Classes="selectableLabel"
+                                                 Text="{Binding SelectedMap.FilePath}"
+                                                 Margin="0,0,0,5"/>
                                     </Grid>
                                 </StackPanel>
 
