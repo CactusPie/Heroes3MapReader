@@ -8,7 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="700"
         x:Class="Heroes3MapReader.UI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="Heroes 3 Map Browser v1.5.0"
+        Title="Heroes 3 Map Browser"
         Width="1200"
         Height="700">
 
@@ -252,106 +252,132 @@
                     BorderThickness="1"
                     CornerRadius="5"
                     Padding="10">
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                              VerticalScrollBarVisibility="Auto">
-                    <StackPanel Spacing="10">
-                        <TextBlock Text="Map Visualization"
-                                   FontWeight="Bold"
-                                   FontSize="16"
-                                   HorizontalAlignment="Center"/>
+                <Grid RowDefinitions="Auto,*">
+                    <TextBlock Text="Map Visualization"
+                               Grid.Row="0"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10"/>
 
-                        <Border IsVisible="{Binding SelectedMap, Converter={x:Static ObjectConverters.IsNull}}"
-                                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
-                                Padding="20"
-                                CornerRadius="5">
-                            <TextBlock Text="Select a map to view its minimap"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-                        </Border>
+                    <Border Grid.Row="1"
+                            IsVisible="{Binding SelectedMap, Converter={x:Static ObjectConverters.IsNull}}"
+                            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                            Padding="20"
+                            CornerRadius="5"
+                            VerticalAlignment="Top">
+                        <TextBlock Text="Select a map to view its minimap"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                    </Border>
 
-                        <StackPanel IsVisible="{Binding SelectedMap, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                    Spacing="10">
-                            <!-- Map Info -->
-                            <StackPanel Spacing="5">
-                                <TextBlock Text="{Binding SelectedMap.Map.Name}"
-                                           FontWeight="Bold"
-                                           FontSize="14"
-                                           TextWrapping="Wrap" />
-                                <ScrollViewer MaxHeight="80"
-                                              Width="300"
-                                              IsVisible="{Binding SelectedMap.Map.Description, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                              VerticalScrollBarVisibility="Auto"
-                                              HorizontalScrollBarVisibility="Disabled">
-                                    <TextBlock Text="{Binding SelectedMap.Map.Description}"
-                                               TextWrapping="Wrap"
-                                               Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
-                                </ScrollViewer>
+                    <Grid Grid.Row="1"
+                          IsVisible="{Binding SelectedMap, Converter={x:Static ObjectConverters.IsNotNull}}"
+                          RowDefinitions="120,5,*">
+
+                        <!-- Map Info -->
+                        <Grid Grid.Row="0" RowDefinitions="Auto,*">
+                            <TextBlock Grid.Row="0"
+                                       Text="{Binding SelectedMap.Map.Name}"
+                                       FontWeight="Bold"
+                                       FontSize="14"
+                                       TextWrapping="Wrap"
+                                       Margin="0,0,0,5"/>
+                            <ScrollViewer Grid.Row="1"
+                                          Width="300"
+                                          IsVisible="{Binding SelectedMap.Map.Description, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                          VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled">
+                                <TextBlock Text="{Binding SelectedMap.Map.Description}"
+                                           TextWrapping="Wrap"
+                                           Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+                            </ScrollViewer>
+                        </Grid>
+
+                        <GridSplitter Grid.Row="1"
+                                      ResizeDirection="Rows"
+                                      Background="Transparent"
+                                      HorizontalAlignment="Stretch"
+                                      Height="12"
+                                      MinHeight="12">
+                            <GridSplitter.Template>
+                                <ControlTemplate>
+                                    <Grid Background="{TemplateBinding Background}">
+                                        <Border VerticalAlignment="Center"
+                                                Height="1"
+                                                Background="{DynamicResource SystemControlForegroundBaseLowBrush}"/>
+                                    </Grid>
+                                </ControlTemplate>
+                            </GridSplitter.Template>
+                        </GridSplitter>
+
+                        <ScrollViewer Grid.Row="2"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Auto">
+                            <StackPanel Spacing="10">
+                                <!-- Minimap -->
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="Minimap" FontWeight="SemiBold"/>
+                                    <Border BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="3"
+                                            HorizontalAlignment="Center">
+                                        <Image Source="{Binding MinimapImage, Converter={StaticResource ByteArrayToImageConverter}}"
+                                               Stretch="Uniform"
+                                               MaxWidth="360"
+                                               MaxHeight="400"
+                                               IsVisible="{Binding MinimapImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                    </Border>
+                                    <TextBlock Text="Loading minimap..."
+                                               HorizontalAlignment="Center"
+                                               IsVisible="{Binding MinimapImage, Converter={x:Static ObjectConverters.IsNull}}"/>
+                                </StackPanel>
+
+                                <!-- Map Stats -->
+                                <StackPanel Spacing="5" Margin="0 0 0 -10">
+                                    <TextBlock Text="Map Details" FontWeight="SemiBold"/>
+                                    <Grid ColumnDefinitions="Auto,10,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Size:" FontWeight="Medium" Margin="0,0,0,5"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding SelectedMap.Map.Size}" Margin="0,0,0,5"/>
+
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Format:" FontWeight="Medium" Margin="0,0,0,5"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SelectedMap.Map.Format, Converter={StaticResource MapFormatConverter}}" Margin="0,0,0,5"/>
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Dimensions:" FontWeight="Medium" Margin="0,0,0,5"/>
+                                        <TextBlock Grid.Row="2" Grid.Column="2" Margin="0,0,0,5">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0}x{1}">
+                                                    <Binding Path="SelectedMap.Map.Width"/>
+                                                    <Binding Path="SelectedMap.Map.Height"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+
+                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Players:" FontWeight="Medium" Margin="0,0,0,5"/>
+                                        <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding SelectedMap.Map.PlayerCount}" Margin="0,0,0,5"/>
+
+                                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Difficulty:" FontWeight="Medium" Margin="0,0,0,5"/>
+                                        <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding SelectedMap.Map.Difficulty}" Margin="0,0,0,5"/>
+
+                                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Underground:" FontWeight="Medium" Margin="0,0,0,5"/>
+                                        <TextBlock Grid.Row="5" Grid.Column="2" Text="{Binding SelectedMap.Map.HasUnderground}" Margin="0,0,0,5"/>
+
+                                        <TextBlock Grid.Row="6" Grid.Column="0" Text="File Path:" FontWeight="Medium" Margin="0,0,0,5"/>
+                                        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding SelectedMap.FilePath}"
+                                                   TextWrapping="Wrap" Margin="0,0,0,5" />
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Playable Factions -->
+                                <views:PlayableFactionsControl Margin="0 0 0 -10" Factions="{Binding PlayableFactions}" />
+
+                                <!-- Banned Spells -->
+                                <views:BannedSpellsControl Spells="{Binding BannedSpells}" />
                             </StackPanel>
-
-                            <Separator/>
-
-                            <!-- Minimap -->
-                            <StackPanel Spacing="5">
-                                <TextBlock Text="Minimap" FontWeight="SemiBold"/>
-                                <Border BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="3"
-                                        HorizontalAlignment="Center">
-                                    <Image Source="{Binding MinimapImage, Converter={StaticResource ByteArrayToImageConverter}}"
-                                           Stretch="Uniform"
-                                           MaxWidth="360"
-                                           MaxHeight="400"
-                                           IsVisible="{Binding MinimapImage, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-                                </Border>
-                                <TextBlock Text="Loading minimap..."
-                                           HorizontalAlignment="Center"
-                                           IsVisible="{Binding MinimapImage, Converter={x:Static ObjectConverters.IsNull}}"/>
-                            </StackPanel>
-
-                            <!-- Map Stats -->
-                            <StackPanel Spacing="5" Margin="0 0 0 -10">
-                                <TextBlock Text="Map Details" FontWeight="SemiBold"/>
-                                <Grid ColumnDefinitions="Auto,10,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Size:" FontWeight="Medium" Margin="0,0,0,5"/>
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding SelectedMap.Map.Size}" Margin="0,0,0,5"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format:" FontWeight="Medium" Margin="0,0,0,5"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding SelectedMap.Map.Format, Converter={StaticResource MapFormatConverter}}" Margin="0,0,0,5"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Dimensions:" FontWeight="Medium" Margin="0,0,0,5"/>
-                                    <TextBlock Grid.Row="2" Grid.Column="2" Margin="0,0,0,5">
-                                        <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0}x{1}">
-                                                <Binding Path="SelectedMap.Map.Width"/>
-                                                <Binding Path="SelectedMap.Map.Height"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-
-                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Players:" FontWeight="Medium" Margin="0,0,0,5"/>
-                                    <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding SelectedMap.Map.PlayerCount}" Margin="0,0,0,5"/>
-
-                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Difficulty:" FontWeight="Medium" Margin="0,0,0,5"/>
-                                    <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding SelectedMap.Map.Difficulty}" Margin="0,0,0,5"/>
-
-                                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Underground:" FontWeight="Medium" Margin="0,0,0,5"/>
-                                    <TextBlock Grid.Row="5" Grid.Column="2" Text="{Binding SelectedMap.Map.HasUnderground}" Margin="0,0,0,5"/>
-
-                                    <TextBlock Grid.Row="6" Grid.Column="0" Text="File Path:" FontWeight="Medium" Margin="0,0,0,5"/>
-                                    <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding SelectedMap.FilePath}"
-                                               TextWrapping="Wrap" Margin="0,0,0,5" />
-                                </Grid>
-                            </StackPanel>
-
-                            <!-- Playable Factions -->
-                            <views:PlayableFactionsControl Margin="0 0 0 -10" Factions="{Binding PlayableFactions}" />
-
-                            <!-- Banned Spells -->
-                            <views:BannedSpellsControl Spells="{Binding BannedSpells}" />
-                        </StackPanel>
-                    </StackPanel>
-                </ScrollViewer>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
             </Border>
         </Grid>
 
