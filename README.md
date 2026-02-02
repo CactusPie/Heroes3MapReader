@@ -41,7 +41,7 @@ Currently supports all vanilla maps as well as HotA maps up to version 1.8 (Bulw
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/CactusPie/Heroes3MapReader.git
    cd Heroes3MapReader
    ```
 
