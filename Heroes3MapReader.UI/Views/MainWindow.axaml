@@ -24,12 +24,6 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
-            <Style.Resources>
-                <SolidColorBrush x:Key="TextControlBackgroundFocused">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="TextControlBackgroundPointerOver">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="TextControlBorderBrushPointerOver">Transparent</SolidColorBrush>
-            </Style.Resources>
         </Style>
         <Style Selector="TextBox.selectableLabel:focus /template/ Border#PART_BorderElement">
             <Setter Property="Background" Value="Transparent"/>
