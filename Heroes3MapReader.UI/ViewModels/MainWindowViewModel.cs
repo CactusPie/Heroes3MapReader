@@ -415,6 +415,7 @@ public partial class MainWindowViewModel : ViewModelBase
         List<FactionType> selectedFactions = FactionFilters.Where(f => f.IsSelected).Select(f => f.Faction).ToList();
         List<SpellType> selectedSpells = SpellFilters.Where(f => f.IsSelected).Select(f => f.Spell).ToList();
         List<MapItemViewModel> allMapsCopy = _allMaps.ToList();
+        MapItemViewModel? currentSelectedMap = SelectedMap;
 
         _ = Task.Run(() =>
         {
@@ -481,6 +482,11 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 // Update UI by replacing the entire collection (single notification)
                 FilteredMaps = new ObservableCollection<MapItemViewModel>(result);
+
+                if (currentSelectedMap != null && result.Contains(currentSelectedMap))
+                {
+                    SelectedMap = currentSelectedMap;
+                }
 
                 int filterCount = allMapsCopy.Count - result.Count;
                 if (filterCount > 0)
