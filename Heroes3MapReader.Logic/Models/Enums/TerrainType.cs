@@ -25,4 +25,8 @@ public enum TerrainType : byte
     Water = 8,
     /// <summary>Rock terrain type</summary>
     Rock = 9,
+    /// <summary>Highlands terrain type</summary>
+    Highlands = 10,
+    /// <summary>Wasteland terrain type</summary>
+    Wasteland = 11,
 }

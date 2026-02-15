@@ -21,16 +21,18 @@ public sealed class MinimapGenerator
     {
         _terrainColors = new Dictionary<TerrainType, Color>
         {
-            { TerrainType.Dirt, Color.ParseHex("#8B7355") },
-            { TerrainType.Sand, Color.ParseHex("#F4E4BC") },
-            { TerrainType.Grass, Color.ParseHex("#4A7023") },
-            { TerrainType.Snow, Color.ParseHex("#E8F4F8") },
-            { TerrainType.Swamp, Color.ParseHex("#3E5B3C") },
-            { TerrainType.Rough, Color.ParseHex("#6B5D4F") },
-            { TerrainType.Subterranean, Color.ParseHex("#2B2522") },
-            { TerrainType.Lava, Color.ParseHex("#D32F2F") },
-            { TerrainType.Water, Color.ParseHex("#2E5C8A") },
-            { TerrainType.Rock, Color.ParseHex("#4A4A4A") },
+            { TerrainType.Dirt, Color.ParseHex("#523808") },
+            { TerrainType.Sand, Color.ParseHex("#DECF8C") },
+            { TerrainType.Grass, Color.ParseHex("#004100") },
+            { TerrainType.Snow, Color.ParseHex("#B5C7C6") },
+            { TerrainType.Swamp, Color.ParseHex("#4A866B") },
+            { TerrainType.Rough, Color.ParseHex("#847131") },
+            { TerrainType.Subterranean, Color.ParseHex("#843000") },
+            { TerrainType.Lava, Color.ParseHex("#4A494A") },
+            { TerrainType.Water, Color.ParseHex("#085194") },
+            { TerrainType.Rock, Color.ParseHex("#000000") },
+            { TerrainType.Wasteland, Color.ParseHex("#B46927") },
+            { TerrainType.Highlands, Color.ParseHex("#54791A") },
         };
 
         _roadColors = new Dictionary<RoadType, Color>
