@@ -69,6 +69,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<MapItemViewModel> _filteredMaps = [];
 
+    [ObservableProperty]
+    private string _searchText = string.Empty;
+
     public ObservableCollection<FactionFilterItemViewModel> FactionFilters { get; } = [];
     public ObservableCollection<SpellFilterItemViewModel> SpellFilters { get; } = [];
     public ObservableCollection<MapSizeFilterItemViewModel> MapSizeFilters { get; } = [];
@@ -80,6 +83,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly ISpellSelectionWindowFactory _spellSelectionWindowFactory;
     private readonly ISettingsRepository _settingsRepository;
     private CancellationTokenSource? _filterCancellationTokenSource;
+    private CancellationTokenSource? _debounceCancellationTokenSource;
 
     public MainWindowViewModel(
         IMapReaderFactory mapReaderFactory,
@@ -186,6 +190,22 @@ public partial class MainWindowViewModel : ViewModelBase
     partial void OnSelectedHasUndergroundChanged(bool? value)
     {
         ApplyFiltersAndSort();
+    }
+
+    partial void OnSearchTextChanged(string value)
+    {
+        _debounceCancellationTokenSource?.Cancel();
+        _debounceCancellationTokenSource = new CancellationTokenSource();
+        CancellationToken cancellationToken = _debounceCancellationTokenSource.Token;
+
+        Task.Delay(500, cancellationToken).ContinueWith(t =>
+        {
+            if (!t.IsCanceled)
+            {
+                Avalonia.Threading.Dispatcher.UIThread.Post(ApplyFiltersAndSort);
+            }
+        },
+        cancellationToken);
     }
 
     partial void OnSelectedMapChanged(MapItemViewModel? oldValue, MapItemViewModel? newValue)
@@ -414,6 +434,7 @@ public partial class MainWindowViewModel : ViewModelBase
         bool? selectedHasUnderground = SelectedHasUnderground;
         List<FactionType> selectedFactions = FactionFilters.Where(f => f.IsSelected).Select(f => f.Faction).ToList();
         List<SpellType> selectedSpells = SpellFilters.Where(f => f.IsSelected).Select(f => f.Spell).ToList();
+        string searchText = SearchText;
         List<MapItemViewModel> allMapsCopy = _allMaps.ToList();
         MapItemViewModel? currentSelectedMap = SelectedMap;
 
@@ -474,6 +495,14 @@ public partial class MainWindowViewModel : ViewModelBase
                 });
             }
 
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                filtered = filtered.Where(m =>
+                    (m.Map.Name?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true) ||
+                    (m.Map.Description?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true)
+                );
+            }
+
             List<MapItemViewModel> result = filtered.ToList();
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -504,6 +533,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void ClearFilters()
     {
+        SearchText = string.Empty;
         SelectedPlayerCount = null;
         SelectedTeamCount = null;
         SelectedDifficulty = null;

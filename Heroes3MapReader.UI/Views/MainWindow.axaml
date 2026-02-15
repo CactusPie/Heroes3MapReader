@@ -8,7 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="700"
         x:Class="Heroes3MapReader.UI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="Heroes 3 Map Browser v1.5.1"
+        Title="Heroes 3 Map Browser v1.6.0"
         Width="1200"
         Height="700">
 
@@ -65,6 +65,14 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,10,0">
                 <StackPanel Spacing="15">
                     <TextBlock Text="Filters" FontWeight="Bold" FontSize="16"/>
+
+                    <!-- Search Filter -->
+                    <StackPanel Spacing="5">
+                        <TextBlock Text="Search" FontWeight="SemiBold"/>
+                        <TextBox Text="{Binding SearchText}"
+                                 Watermark="Name or description..."
+                                 HorizontalAlignment="Stretch"/>
+                    </StackPanel>
 
                     <!-- Player Count Filter -->
                     <StackPanel Spacing="5">
